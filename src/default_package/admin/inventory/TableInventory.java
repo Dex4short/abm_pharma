@@ -8,6 +8,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import customs.DescriptionArea;
+import database.mysql.MySQL_Inventory;
 import customs.DateLabel;
 import gui.Panel;
 import gui.Table;
@@ -22,8 +23,8 @@ public abstract class TableInventory extends Table implements InventoryConstants
 	}
 	public void addRow(Product product) {
 		addRow(new JComponent[] {
-				new JLabel(product.getItemNo() + ""),
-				new DescriptionArea(product.getDescription()) {
+				new JLabel(product.getItem().getItemNo() + ""),
+				new DescriptionArea(product.getItem().getDescription()) {
 					private static final long serialVersionUID = 3496999908344369471L;
 					{
 						addMouseListener(new MouseAdapter() {
@@ -40,14 +41,14 @@ public abstract class TableInventory extends Table implements InventoryConstants
 						super.setBounds(x, y, width-10, height);
 					}
 				},
-				new JLabel(product.getLotNo()),
-				new JLabel(product.getDateAdded().toString()),
+				new JLabel(product.getItem().getLotNo()),
+				new JLabel(product.getItem().getDateAdded().toString()),
 				new Panel() {
 					private static final long serialVersionUID = 3826616726128215212L;
 					private DateLabel exp_lbl;
 					{
 						setLayout(new GridLayout(1,1));
-						exp_lbl = new DateLabel(product.getExpDate().toString()) {
+						exp_lbl = new DateLabel(product.getItem().getExpDate().toString()) {
 							private static final long serialVersionUID = 28304963119071874L;
 							@Override
 							public void onAction() {
@@ -62,16 +63,27 @@ public abstract class TableInventory extends Table implements InventoryConstants
 						add(exp_lbl);
 					}
 				},
-				new JLabel(product.getBrand()),
-				new JLabel(product.getQty() + ""),
-				new JLabel(product.getUom().getUnitName()),
-				new JLabel(product.getCost().toString()),
-				new JLabel(product.getUnitPrice().toString()),
-				new JLabel(product.getDiscount().getPercentValue()),
-				new JLabel(product.getUnitAmount().toString())
+				new JLabel(product.getItem().getBrand()),
+				new JLabel(product.getPackaging().getQty().getQuantity() + ""),
+				new JLabel(product.getPackaging().getUom().getUnitName()),
+				new JLabel(product.getPricing().getCost().toString()),
+				new JLabel(product.getPricing().getUnitPrice().toString()),
+				new JLabel(product.getPricing().getDiscount().getPercentValue()),
+				new JLabel(product.getPricing().getUnitAmount().toString())
 		});
 	}
+	public void insertItem(Product product) {
+		MySQL_Inventory.insertInventory(product);
+		addRow(product);
+	}
+	public void displayItems() {
+		Product products[] = MySQL_Inventory.selectAllProducts();
+		for(Product product: products) {
+			addRow(product);
+		}
+	}
 	public Product getSelectedProduct() {
+		//TODO
 		return null;
 	}
 }

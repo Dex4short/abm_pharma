@@ -1,6 +1,5 @@
 package default_package.admin.inventory;
 
-import database.mysql.MySQL_Inventory;
 import default_package.ABM_Pharma;
 import gui.Button;
 import gui.IconedButton;
@@ -39,6 +38,7 @@ public class ViewInventory extends Panel implements InventoryConstants, Icons{
 		}
 		
 		inventory_table = new InventoryTable();
+		inventory_table.displayItems();
 		add(inventory_table);
 		
 	}
@@ -181,10 +181,9 @@ public class ViewInventory extends Panel implements InventoryConstants, Icons{
 			}
 			@Override
 			public void onProductOk(Product product) {
-				MySQL_Inventory.insertInventory(product);
 				inventory_table.addRow(product);
 				ABM_Pharma.getWindow().getStacksPanel().popPanel();
-				ABM_Pharma.getWindow().getDisplayPanel().floatMessage("+ " + product.getDescription() + " " + product.getBrand() + ".");
+				ABM_Pharma.getWindow().getDisplayPanel().floatMessage("+ " + product.getItem().getDescription() + " " + product.getItem().getBrand() + ".");
 			}
 			@Override
 			public void onProductCancel() {

@@ -91,17 +91,15 @@ public abstract class MySQL {
 		
 		new MySQL() {
 			private int i,ii;
-			private final String query;
-			{
+			@Override
+			public void onExecute() throws Exception {	
 				String query = "select ";
+				
 				for(i=0; i<column_count-1; i++) {
 					query += columns[i] + ", ";
 				}
 				query += columns[i] + " from " + table + " " + condition + " ;";
-				this.query = query;
-			}
-			@Override
-			public void onExecute() throws Exception {				
+				
 				s = c.createStatement();
 				rs = s.executeQuery(query);
 				
@@ -140,11 +138,19 @@ public abstract class MySQL {
 		
 		return id[0];
 	}
-	public static void update(String table_name, String columns[], Object values[], String condition) {
+	/**
+	 * update into table set columns[0]=values[0], columns[1]=values[1], columns[2]=values[2], ... columns[n]=values[n] where condition; 
+	 * 
+	 * @param table - table name.
+	 * @param columns - name of selected columns or "*" for select all.
+	 * @param values - corresponding value parallel to the defined columns.
+	 * @param condition - conditional query, requires the term "where".
+	 */
+	public static void update(String table, String columns[], Object values[], String condition) {
 		new MySQL() {
 			@Override
 			public void onExecute() throws Exception {
-				String query = "update " + table_name + " set ";
+				String query = "update " + table + " set ";
 				
 				int i;
 				for(i=0; i<columns.length-1; i++) {

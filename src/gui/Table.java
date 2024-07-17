@@ -151,6 +151,9 @@ public abstract class Table extends Panel{
 	public void removeRow(int n) {
 		list_panel.removeItem(n);
 	}
+	public void removeAllRows() {
+		list_panel.removeAllItems();
+	}
 	public void checkSelectedRows() {
 		checked_rows = new int[getCheckCount()];
 		list_panel.getItemList().forEach(new Consumer<JComponent>() {

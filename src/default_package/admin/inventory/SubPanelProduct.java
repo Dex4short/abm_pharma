@@ -24,7 +24,10 @@ import misc.interfaces.InventoryConstants;
 import misc.interfaces.Theme;
 import misc.objects.Date;
 import misc.objects.Decimal;
+import misc.objects.Item;
+import misc.objects.Packaging;
 import misc.objects.Percentage;
+import misc.objects.Pricing;
 import misc.objects.Product;
 import misc.objects.Quantity;
 import misc.objects.Uom;
@@ -91,18 +94,24 @@ public abstract class SubPanelProduct extends ActionPanel implements InventoryCo
 	public void onOk() {
 		try {
 			setProduct(new Product(
-					(String)getValue(item_no),
-					(String)getValue(description),
-					(String)getValue(lot_no),
-					(Date)getValue(date_added),
-					(Date)getValue(exp_date),
-					(String)getValue(brand),
-					(Quantity)getValue(qty),
-					(Uom)getValue(uom),
-					(Decimal)getValue(cost),
-					(Decimal)getValue(unit_price),
-					(Percentage)getValue(discount),
-					(Decimal)getValue(unit_amount)
+					new Item(
+						(String)getValue(item_no),
+						(String)getValue(description),
+						(String)getValue(lot_no),
+						(Date)getValue(date_added),
+						(Date)getValue(exp_date),
+						(String)getValue(brand)
+					),
+					new Packaging(
+						(Quantity)getValue(qty),
+						(Uom)getValue(uom)
+					),
+					new Pricing(
+						(Decimal)getValue(cost),
+						(Decimal)getValue(unit_price),
+						(Percentage)getValue(discount),
+						(Decimal)getValue(unit_amount)
+					)
 			));
 			onProductOk(getProduct());
 		}

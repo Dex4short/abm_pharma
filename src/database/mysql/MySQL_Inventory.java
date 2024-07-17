@@ -1,5 +1,9 @@
 package database.mysql;
 
+import misc.interfaces.UID;
+import misc.objects.Item;
+import misc.objects.Packaging;
+import misc.objects.Pricing;
 import misc.objects.Product;
 
 public class MySQL_Inventory{
@@ -9,25 +13,13 @@ public class MySQL_Inventory{
 		int 
 		inv_id = MySQL.nextUID("inventory"),
 		item_id = MySQL_Items.insertItem(
-				product.getItemNo(),
-				product.getDescription(),
-				product.getLotNo(),
-				product.getDateAdded(),
-				product.getExpDate(),
-				product.getBrand()
-		),
-		uom_id = MySQL_Uom.insertUom(
-				product.getUom()
+				product.getItem()
 		),
 		pack_id = MySQL_Packaging.insertPackaging(
-				product.getQty(),
-				uom_id
+				product.getPackaging()
 		),
 		price_id = MySQL_Pricing.insertPricing(
-				product.getCost(),
-				product.getUnitPrice(),
-				product.getDiscount(),
-				product.getUnitAmount()
+				product.getPricing()
 		);
 		
 		Object values[] = {
@@ -40,22 +32,45 @@ public class MySQL_Inventory{
 		
 		return inv_id;
 	}
-	/*
 	public static Product[] selectAllProducts() {
-		Object result[][] = MySQL.select(new String[] {"*"}, "inventory", "");
-		Product products[] = new Product[result.length];
+		Object inventory_result[][] = MySQL.select(InventoryColumns, "inventory", "");		
+		
+		RetrievedProduct products[] = new RetrievedProduct[inventory_result.length];
+		int item_id,pack_id,price_id;
 		
 		for(int i=0; i<products.length; i++) {
-			products[i]MySQL_Inventory = new Product(
-					(int)result[i][0],
-					(String)result[i][1], 
-					(String)result[i][2], 
-					new Date((String)result[i][3]), 
-					new Date((String)result[i][4]),
-					(String)result[i][5], 
-					new Quantity(i, i), null, null, null, null, null);
+			final int inv_id = (int)inventory_result[i][0];
+			
+			item_id = (int)inventory_result[i][1];
+			pack_id = (int)inventory_result[i][2];
+			price_id = (int)inventory_result[i][3];
+			
+			Item
+			item = MySQL_Items.selectItem(item_id);
+			
+			Packaging
+			packaging = MySQL_Packaging.selectPackaging(pack_id);
+			
+			Pricing
+			pricing = MySQL_Pricing.selectPricing(price_id);
+			
+			products[i] = new RetrievedProduct(item, packaging, pricing) {
+				@Override
+				public int getId() {
+					// TODO Auto-generated method stub
+					return inv_id;
+				}
+			};
+			
 		}
-		return
+		
+		return products;
 	}
-	*/
+	
+	public static abstract class RetrievedProduct extends Product implements UID{
+		public RetrievedProduct(Item item, Packaging packaging, Pricing pricing) {
+			super(item, packaging, pricing);
+			// TODO Auto-generated constructor stub
+		}
+	}
 }

@@ -8,8 +8,6 @@ import gui.ActionPanel;
 import gui.HorizontalPanel;
 import gui.IterationBox;
 import gui.ListPanel;
-import gui.NumericField;
-import gui.TextField;
 import misc.interfaces.Theme;
 import misc.interfaces.UomPresets;
 import misc.objects.Uom;

@@ -10,6 +10,16 @@ public class Uom {
 		setUnitSize(unitSize);
 		setSubUom(subUom);
 	}
+	@Override
+	public String toString() {
+		String str = "[" + getUnitName() + " : " + getUnitSize() + "]";
+		Uom sub_uom = getSubUom();
+		while(sub_uom != null) {
+			str += " -> [" + sub_uom.getUnitName() + " : " + sub_uom.getUnitSize() + "]";
+			sub_uom = sub_uom.getSubUom();
+		}
+		return str;
+	}
 	public String getUnitName() {
 		return unit_name;
 	}

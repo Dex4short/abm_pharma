@@ -2,6 +2,10 @@ package default_package.admin.inventory;
 
 import java.awt.Color;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.math.BigDecimal;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -12,6 +16,7 @@ import gui.ActionPanel;
 import gui.Button;
 import gui.DatePicker;
 import gui.HorizontalPanel;
+import gui.NumericField;
 import gui.TwinIntegerField;
 import gui.TextField;
 import misc.interfaces.Field;
@@ -104,6 +109,7 @@ public abstract class SubPanelProduct extends ActionPanel implements InventoryCo
 		catch (Exception e) {
 			Toolkit.getDefaultToolkit().beep();
 			ABM_Pharma.getWindow().getDisplayPanel().floatMessage(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 	@Override
@@ -119,8 +125,11 @@ public abstract class SubPanelProduct extends ActionPanel implements InventoryCo
 	public Object getValue(int index) throws Exception{
 		return field[index].getValue();
 	}
+	public Field getField(int field_index) {
+		return field[field_index];
+	}
 	public void displayProduct(int item_no) {
-		
+		//TODO
 	}
 	public abstract void onProductOk(Product product);
 	public abstract void onProductCancel();
@@ -304,25 +313,36 @@ public abstract class SubPanelProduct extends ActionPanel implements InventoryCo
 		}
 	}
 	
-	public class DecimalField extends TextField implements Field{
+	public class DecimalField extends NumericField implements Field{
 		private static final long serialVersionUID = -1983438059373165334L;
 		
 		public DecimalField(String txt) {
 			super(txt);
 			setBackground(new Color(0,0,0,0));
 			setForeground(new Color(0,0,0,0));
+			include(KeyEvent.VK_PERIOD);
+			include(KeyEvent.VK_COMMA);
 		}
 		@Override
-		public Object getValue() {
-			return new Decimal(getTextField().getText());
+		public Object getValue() throws Exception{
+			String regex = "^\\d{1,3}(,\\d{3})*(\\.\\d{2})?$";
+			Pattern pattern = Pattern.compile(regex);
+			Matcher matcher = pattern.matcher(getTextField().getText());
+			
+			if(matcher.matches()) {
+				return new Decimal(new BigDecimal(getTextField().getText().replace(",", "")));
+			}
+			else {
+				throw new Exception("Invalid decimal expression, (1,000,000.00) ");
+			}
 		}
 		@Override
 		public void setValue(Object value) {
-			//TODO
+			getTextField().setText(((Decimal)value).toString());
 		}
 	}
 	
-	public class PercentageField extends TextField implements Field{
+	public class PercentageField extends NumericField implements Field{
 		private static final long serialVersionUID = 1998228066987443752L;
 
 		public PercentageField(String txt, String pre_text) {
@@ -331,12 +351,21 @@ public abstract class SubPanelProduct extends ActionPanel implements InventoryCo
 			setForeground(new Color(0,0,0,0));
 		}
 		@Override
-		public Object getValue() {
-			return new Percentage(getTextField().getText());
+		public Object getValue() throws Exception{
+			String regex = "%100|%([1-9]?[0-9])";
+			Pattern pattern = Pattern.compile(regex);
+			Matcher matcher = pattern.matcher(getTextField().getText());
+			
+			if(matcher.matches()) {
+				return new Percentage(getTextField().getText());
+			}
+			else {
+				throw new Exception("Invalid percentage expression, (%0 ~ %100) ");
+			}
 		}
 		@Override
 		public void setValue(Object value) {
-			//TODO
+			getTextField().setText(((Percentage)value).toString());
 		}
 	}
 }

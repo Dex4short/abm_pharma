@@ -16,6 +16,7 @@ public class Product {
 		setExpDate(exp_date);
 		setBrand(brand);
 		setQty(qty);
+		setUom(uom);
 		setCost(cost);
 		setUnitPrice(unit_price);
 		setDiscount(discount);

@@ -177,6 +177,7 @@ public class ViewInventory extends Panel implements InventoryConstants, Icons{
 			private static final long serialVersionUID = 5028819089367136642L;
 			public SubPanelAddProduct() {
 				super("Add New Product");
+				((QtyField)getField(InventoryConstants.qty)).maintainAspectRatio(1);
 			}
 			@Override
 			public void onProductOk(Product product) {
@@ -189,6 +190,7 @@ public class ViewInventory extends Panel implements InventoryConstants, Icons{
 			public void onProductCancel() {
 				ABM_Pharma.getWindow().getStacksPanel().popPanel();
 			}
+			
 		}
 	}
 	

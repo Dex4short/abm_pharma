@@ -17,4 +17,5 @@ public interface UomPresets {
 			new Uom("sachet", 1, null),
 			new Uom("jar", 1, null),
 	};
+	public final String Uom_Sizes[] = {"4", "6", "8", "10", "12", "14"};
 }

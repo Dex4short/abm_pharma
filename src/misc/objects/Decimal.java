@@ -6,8 +6,8 @@ import java.text.DecimalFormat;
 public class Decimal {
 	private BigDecimal bigdecimal_value;
 	
-	public Decimal(String decimal_value) {
-		setBigDecimalValue(new BigDecimal(decimal_value));
+	public Decimal(BigDecimal bigdecimal_value) {
+		setBigDecimalValue(bigdecimal_value);
 	}
 	@Override
 	public String toString() {

@@ -16,9 +16,12 @@ public class MySQL_Inventory{
 				product.getExpDate(),
 				product.getBrand()
 		),
+		uom_id = MySQL_Uom.insertUom(
+				product.getUom()
+		),
 		pack_id = MySQL_Packaging.insertPackaging(
 				product.getQty(),
-				item_id
+				uom_id
 		),
 		price_id = MySQL_Pricing.insertPricing(
 				product.getCost(),

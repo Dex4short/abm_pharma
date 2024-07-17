@@ -122,24 +122,43 @@ public abstract class MySQL {
 	 * 
 	 * @param table - table name
 	 */
-	public static int nextUID(String table) {
+	public static int nextUID(String table_name) {
 		final int id[] = {-1};
 		
 		new MySQL() {
 			@Override
 			public void onExecute() throws Exception {
 				s = c.createStatement();
-				rs = s.executeQuery("select next_id from uid where table_name='" + table + "' ;");
+				rs = s.executeQuery("select next_id from uid where table_name='" + table_name + "' ;");
 				while(rs.next()) {
 					id[0] = rs.getInt(1);
 				}
-				ps = c.prepareStatement("insert into uid(next_id) values(?) where table_name='" + table + "' ;");
-				ps.setInt(1, id[0] + 1);
-				ps.execute();
+				
+				update("uid", new String[] {"next_id"}, new Object[] {id[0] + 1}, "where table_name='" + table_name +"' ");
 			}
-		};
+		}.execute();
 		
 		return id[0];
+	}
+	public static void update(String table_name, String columns[], Object values[], String condition) {
+		new MySQL() {
+			@Override
+			public void onExecute() throws Exception {
+				String query = "update " + table_name + " set ";
+				
+				int i;
+				for(i=0; i<columns.length-1; i++) {
+					query += columns[i] + "=?, ";
+				}
+				query += columns[i] + "=? " + condition + " ;";
+				
+				ps = c.prepareStatement(query);
+				for(i=0; i<values.length; i++) {
+					ps.setObject(i+1, values[i]);
+				}
+				ps.execute();
+			}
+		}.execute();
 	}
 	/** 
 	 * insert into table (columns[0], columns[1], columns[2]... columns[n]) values(values[0], values[1], values[2]... values[n]);
@@ -176,6 +195,6 @@ public abstract class MySQL {
 				}
 				ps.execute();
 			}
-		};
+		}.execute();
 	}
 }

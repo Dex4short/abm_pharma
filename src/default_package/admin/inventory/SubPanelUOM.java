@@ -6,7 +6,9 @@ import javax.swing.JLabel;
 
 import gui.ActionPanel;
 import gui.HorizontalPanel;
+import gui.IterationBox;
 import gui.ListPanel;
+import gui.NumericField;
 import gui.TextField;
 import misc.interfaces.Theme;
 import misc.interfaces.UomPresets;
@@ -116,14 +118,16 @@ public abstract class SubPanelUOM extends ActionPanel implements UomPresets{
 				uom = uom.getSubUom();
 				
 				sub_uoms += ": " + uom.getUnitName() + " ";
-				sub_uom.addSubUomItem(uom.getUnitName(), uom.getUnitSize());
+				sub_uom.addSubUomItem(uom);
+				
 			}
 			
 			uom_lbl1.setText(main_uom);
 			if(sub_uoms.equals("")) {
 				sub_uom.addItem("none");
 				uom_lbl2.setText(": none");
-			}			else {
+			}
+			else {
 				uom_lbl2.setText(sub_uoms);
 			}
 		}
@@ -131,6 +135,7 @@ public abstract class SubPanelUOM extends ActionPanel implements UomPresets{
 	
 	public class SubUomPanel extends ListPanel{
 		private static final long serialVersionUID = 8252498005827473422L;
+		
 		{
 			addItem("none");
 		}
@@ -138,26 +143,37 @@ public abstract class SubPanelUOM extends ActionPanel implements UomPresets{
 		public void onSelectItem(int n) {
 			
 		}
-		public void addSubUomItem(String unit_name, int unit_overall) {
-			addItem(new SubUomItem(unit_name, unit_overall));
+		public void addSubUomItem(Uom subUom) {
+			addItem(new SubUomItem(subUom));
 		}
 		
 		private class SubUomItem extends HorizontalPanel{
 			private static final long serialVersionUID = -5248387306150387785L;
 
-			public SubUomItem(String unit_name, int unit_overall) {
+			public SubUomItem(Uom subUom) {
 				setMargine(2);
 				setForeground(new Color(0,0,0,0));
 				setBackground(getForeground());
 				
-				JLabel unitName_label = new JLabel(unit_name);
+				JLabel unitName_label = new JLabel(subUom.getUnitName());
 				unitName_label.setOpaque(false);
 				unitName_label.setFont(Theme.h1);
 				unitName_label.setForeground(Theme.doc_color[1]);
 				add(unitName_label);
 				
-				TextField unitOverall_field = new TextField(unit_overall + "");
-				add(unitOverall_field);
+				IterationBox unitSize_field = new IterationBox(Uom_Sizes, 3) {
+					private static final long serialVersionUID = 1L;
+					@Override
+					public void onIncrement(String selectedIterationValue) {
+						subUom.setUnitSize(Integer.parseInt(selectedIterationValue));
+					}
+					@Override
+					public void onDecrement(String selectedIterationValue) {
+						subUom.setUnitSize(Integer.parseInt(selectedIterationValue));
+					}
+				};
+				
+				add(unitSize_field);
 			}
 		}
 	}

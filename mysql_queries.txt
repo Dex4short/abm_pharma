@@ -1,0 +1,24 @@
+create database abm_pharma;
+
+use abm_pharma;
+
+create table security(sec_id int, password varchar(16), role varchar(3));
+insert into security values(0, 'admin', 'adm');
+insert into security values(0, 'employee', 'emp');
+
+create table items(item_id int, item_no varchar(8), description varchar(64), lot_no varchar(8), date_added date, exp_date date, brand varchar(32));
+
+create table packaging(pack_id int, qty int, size int, uom_id int);
+
+create table uom(uom_id int, name varchar(16), size int, subUom_id int);
+
+create table pricing(price_id int, cost decimal(10,2), unit_price decimal(10,2), discount varchar(4), unit_amount decimal(10,2));
+
+create table inventory(inv_id int, item_id int, pack_id int, price_id int);
+
+create table uid(table_name varchar(16), next_id int);
+insert into uid values('security', 2);
+insert into uid values('packaging', 1);
+insert into uid values('uom', 1);
+insert into uid values('pricing', 1);
+insert into uid values('inventory', 1);

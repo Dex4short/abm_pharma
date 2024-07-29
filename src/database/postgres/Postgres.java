@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import misc.enums.Role;
+import misc.enums.SecurityRole;
 
 public class Postgres {
 	private Connection c;
@@ -20,7 +20,7 @@ public class Postgres {
 			e.printStackTrace();
 		}
 	}
-	public Role getAccess(char password[]) {
+	public SecurityRole getAccess(char password[]) {
 		String pass="";
 		for(char p: password) {
 			pass += p;
@@ -31,10 +31,10 @@ public class Postgres {
 			rs = s.executeQuery("select role from security where password='" + pass + "';");
 			if(rs.next()) {
 				if(rs.getString(1).equals("adm")) {
-					return Role.ADMIN;
+					return SecurityRole.ADMIN;
 				}
 				else {
-					return Role.EMPLOYEE;
+					return SecurityRole.EMPLOYEE;
 				}
 			}
 			c.close();
@@ -42,6 +42,6 @@ public class Postgres {
 			e.printStackTrace();
 		}
 		
-		return Role.NONE;
+		return SecurityRole.NONE;
 	}
 }

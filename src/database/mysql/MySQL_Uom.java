@@ -1,27 +1,36 @@
 package database.mysql;
 
-import misc.interfaces.UID;
+import misc.enums.UomType;
 import misc.objects.Uom;
 
 public class MySQL_Uom {
 	public static String UomColumns[] = {"uom_id", "name", "size", "subUom_id"};
 	
-	public static int insertUom(Uom uom) {
+	public static void insertUom(Uom uom) {
 		if(uom != null) {
-			int uom_id = MySQL.nextUID("uom");
+			Uom sub_uom = uom.getSubUom();
+			insertUom(sub_uom);
 			
-			Object values[] = {
-					uom_id,
-					uom.getUnitName(),
+			int sub_uomId;
+			if(sub_uom != null) {
+				sub_uomId = sub_uom.getUomId();
+			}
+			else {
+				sub_uomId = -1;
+			}
+			
+			Object 
+			values[] = {
+					uom.getUomId(),
+					uom.getUnitType().toString(),
 					uom.getUnitSize(),
-					insertUom(uom.getSubUom())
-			};
-			MySQL.insert("uom", UomColumns, values);
+					sub_uomId
+			},
+			uom_result[][] = MySQL.select(new String[] {"uom_id"}, "uom", "where uom_id=" + uom.getUomId());
 			
-			return uom_id;
-		}
-		else {
-			return -1;
+			if(uom_result.length == 0) {
+				MySQL.insert("uom", UomColumns, values);
+			}
 		}
 	}
 	public static Uom selectUom(int uom_id) {
@@ -38,22 +47,13 @@ public class MySQL_Uom {
 			Uom
 			sub_uom	  = selectUom(subUom_id);
 			
-			return new UomRetrieved(unit_name, unit_size, sub_uom) {
-				@Override
-				public int getId() {
-					return (int)uom_result[0][0];
-				}
-			};
+			return new Uom(uom_id, UomType.valueOf(unit_name), unit_size, sub_uom);
 		}
 		else {
 			return null;
 		}
 	}
-	
-	public static abstract class UomRetrieved extends Uom implements UID{
-		public UomRetrieved(String unitName, int unitSize, Uom subUom) {
-			super(unitName, unitSize, subUom);
-			// TODO Auto-generated constructor stub
-		}
+	public static void updateUom(Uom uom) {
+		insertUom(uom);
 	}
 }

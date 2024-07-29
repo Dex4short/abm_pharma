@@ -118,21 +118,20 @@ public abstract class MySQL {
 	/** 
 	 * gets the next unique ID of the table.
 	 * 
-	 * @param table - table name
+	 * @param id_name - column id name of the table.
+	 * @param table_name - table name.
 	 */
-	public static int nextUID(String table_name) {
+	public static int nextUID(String id_name, String table_name) {
 		final int id[] = {-1};
 		
 		new MySQL() {
 			@Override
 			public void onExecute() throws Exception {
 				s = c.createStatement();
-				rs = s.executeQuery("select next_id from uid where table_name='" + table_name + "' ;");
+				rs = s.executeQuery("select max(" + id_name + ") from " + table_name);
 				while(rs.next()) {
-					id[0] = rs.getInt(1);
+					id[0] = rs.getInt(1) + 1;
 				}
-				
-				update("uid", new String[] {"next_id"}, new Object[] {id[0] + 1}, "where table_name='" + table_name +"' ");
 			}
 		}.execute();
 		
@@ -199,6 +198,21 @@ public abstract class MySQL {
 				for(i=0; i<values.length; i++) {
 					ps.setObject(i+1, values[i]);
 				}
+				ps.execute();
+			}
+		}.execute();
+	}
+	/** 
+	 * delete from table where condition;
+	 * 
+	 * @param table - table name.
+	 * @param condition - conditional query, requires the term "where".
+	 */
+	public static void delete(String table, String condition) {
+		new MySQL() {
+			@Override
+			public void onExecute() throws Exception {
+				ps = c.prepareStatement("delete from " + table + " " + condition + ";");
 				ps.execute();
 			}
 		}.execute();

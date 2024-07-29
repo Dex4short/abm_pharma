@@ -1,16 +1,25 @@
 package misc.objects;
 
 public class Item {
+	private int item_id;
 	private String item_no,description, lot_no, brand;
 	private Date date_added, exp_date;
 
-	public Item(String item_no, String description, String lot_no, Date date_added, Date exp_date, String brand) {
+	public Item(int inv_id, String item_no, String description, String lot_no, Date date_added, Date exp_date, String brand) {
+		setItemId(inv_id);
+		setItemNo(item_no);
 		setItemNo(item_no);
 		setDescription(description);
 		setLotNo(lot_no);
 		setDateAdded(date_added);
 		setExpDate(exp_date);
 		setBrand(brand);
+	}
+	public int getItemId() {
+		return item_id;
+	}
+	public void setItemId(int item_id) {
+		this.item_id = item_id;
 	}
 	public String getItemNo() {
 		return item_no;

@@ -11,7 +11,9 @@ public interface Icons {
 	PencilIcon = getIcon("res/pencil.png"),
 	DeleteIcon = getIcon("res/delete.png"),
 	AddIcon = getIcon("res/add.png"),
-	CheckIcon = getIcon("res/check.png");
+	CheckIcon = getIcon("res/check.png"),
+	InventoryIcon = getIcon("res/inventory.png"),
+	ReserveIcon = getIcon("res/reserve.png");
 
 	public static ImageIcon getIcon(String path) {
 		return new ImageIcon(Toolkit.getDefaultToolkit().getImage(path)); 

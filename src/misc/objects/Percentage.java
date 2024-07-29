@@ -1,5 +1,7 @@
 package misc.objects;
 
+import java.math.BigDecimal;
+
 public class Percentage {
 	private String percent_value;
 	/**
@@ -7,12 +9,6 @@ public class Percentage {
 	 * @param percent_value with % sign, "%0"~"%100".
 	 */
 	public Percentage(String percent_value) {
-		setPercentValue(percent_value);
-	}
-	public String getPercentValue() {
-		return percent_value;
-	}
-	public void setPercentValue(String percent_value){
 		if(percent_value.charAt(0) != '%') {
 			System.err.println("percent value must have a percent symbol");
 		}
@@ -20,7 +16,12 @@ public class Percentage {
 			this.percent_value = percent_value;
 		}
 	}
-	public int parseInt() {
-		return Integer.parseInt(percent_value.substring(1, percent_value.length()));
+	@Override
+	public String toString() {
+		return percent_value;
+	}
+	public BigDecimal toBigDecimal() {
+		String str = percent_value.substring(1, percent_value.length());
+		return new BigDecimal(str).multiply(new BigDecimal("0.01"));
 	}
 }

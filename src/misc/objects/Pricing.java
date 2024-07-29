@@ -1,14 +1,22 @@
 package misc.objects;
 
 public class Pricing {
+	private int price_id;
 	private Decimal cost, unit_price, unit_amount;
 	private Percentage discount;
 
-	public Pricing(Decimal cost, Decimal unit_price, Percentage discount, Decimal unit_amount) {
+	public Pricing(int price_id, Decimal cost, Decimal unit_price, Percentage discount, Decimal unit_amount) {
+		setPriceId(price_id);
 		setCost(cost);
 		setUnitPrice(unit_price);
 		setDiscount(discount);
 		setUnitAmount(unit_amount);
+	}
+	public int getPriceId() {
+		return price_id;
+	}
+	public void setPriceId(int price_id) {
+		this.price_id = price_id;
 	}
 	public Decimal getCost() {
 		return cost;

@@ -11,7 +11,7 @@ import gui.Button;
 import gui.Link;
 import gui.Panel;
 import gui.PasswordField;
-import misc.enums.Role;
+import misc.enums.SecurityRole;
 import misc.interfaces.Theme;
 
 public abstract class PanelLogin extends Panel{
@@ -86,7 +86,7 @@ public abstract class PanelLogin extends Panel{
 		cancel_link.setBounds((getWidth()/2) - 50, (int)(getHeight()*0.82) - 13, 100, 25);
 	}
 	private void inputPassword(char password[]) {
-		Role role = MySQL_Security.getAccess(password);
+		SecurityRole role = MySQL_Security.getAccess(password);
 		pass.clearPassword();
 		switch (role) {
 		case ADMIN:
@@ -102,5 +102,5 @@ public abstract class PanelLogin extends Panel{
 		
 		onLogin(role);
 	}
-	public abstract void onLogin(Role role);
+	public abstract void onLogin(SecurityRole role);
 }

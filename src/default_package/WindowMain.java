@@ -7,7 +7,7 @@ import default_package.login.PanelLogin;
 import gui.DisplayPanel;
 import gui.Panel;
 import gui.StacksPanel;
-import misc.enums.Role;
+import misc.enums.SecurityRole;
 import misc.interfaces.Theme;
 
 public class WindowMain extends JFrame{
@@ -37,11 +37,11 @@ public class WindowMain extends JFrame{
 		stacks_panel.pushPanel(new PanelLogin() {
 			private static final long serialVersionUID = 8576528911235392926L;
 			@Override
-			public void onLogin(Role role) {
-				if(role == Role.ADMIN) {
+			public void onLogin(SecurityRole role) {
+				if(role == SecurityRole.ADMIN) {
 					initializePanelAdmin();
 				}
-				else if(role == Role.EMPLOYEE) {
+				else if(role == SecurityRole.EMPLOYEE) {
 					initializePanelEmployee();
 				}
 			}

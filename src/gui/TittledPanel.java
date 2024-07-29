@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 
 import misc.interfaces.Theme;
 
-public abstract class TittledPanel extends Panel{
+public abstract class TittledPanel extends Panel implements Theme{
 	private static final long serialVersionUID = -5812723597349547472L;
 	private JLabel tittle_label;
 	private Panel content_pane;
@@ -17,12 +17,12 @@ public abstract class TittledPanel extends Panel{
 	public TittledPanel(String tittle) {
 		setArc(25);
 		setMargine(10);
-		setBackground(Theme.doc_color[0]);
-		setForeground(Theme.gray_shade[0]);
+		setBackground(doc_color[0]);
+		setForeground(gray_shade[0]);
 		
 		tittle_label = new JLabel(tittle);
-		tittle_label.setFont(Theme.h1);
-		tittle_label.setForeground(Theme.main_color[2]);
+		tittle_label.setFont(h1);
+		tittle_label.setForeground(main_color[2]);
 		add(tittle_label);
 		
 		content_pane = new Panel() {
@@ -71,11 +71,7 @@ public abstract class TittledPanel extends Panel{
 	}
 	public void onResizeTitledPanel(int w, int h) {
 		tittle_label.setBounds(getMargine(), 0, w - (getMargine()*2), 30);
-		tittle_label.repaint();
 		content_pane.setBounds(getMargine(), tittle_label.getHeight() + getMargine(), tittle_label.getWidth(), h-tittle_label.getHeight()-(getMargine()*2));
-		content_pane.repaint();
-
-		repaint();
 	};
 	public abstract void onResizeContentPane(int w, int h);
 }

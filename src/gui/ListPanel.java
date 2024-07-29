@@ -39,6 +39,7 @@ public abstract class ListPanel extends Panel{
 		setMargine(10);
 		
 		list = new ArrayList<JComponent>();
+		
 		v_scroll_bar = new VerticalScrollBar() {
 			private static final long serialVersionUID = -8856133957642873324L;
 			@Override
@@ -52,8 +53,6 @@ public abstract class ListPanel extends Panel{
 		};
 		add(v_scroll_bar);
 		
-		hovered = -1;
-		
 		addMouseWheelListener(new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
@@ -61,7 +60,8 @@ public abstract class ListPanel extends Panel{
 				repaint();
 			}
 		});
-		
+
+		hovered = -1;
 	}
 	@Override
 	public void paint(Graphics g) {
@@ -124,43 +124,27 @@ public abstract class ListPanel extends Panel{
 		return v_scroll_bar;
 	}
 	public void addItem(String str) {
-		addItem(new JLabel(str) {
-			private static final long serialVersionUID = -5588515571384403736L;
-			{
-				setOpaque(false);
-				setFont(Theme.h1);
-				setForeground(Theme.doc_color[1]);
-			}
-		});
+		addItem(new DefaultItem(str));
 	}
 	public JComponent addItem(JComponent component) {
 		list.add(component);
-		component.addMouseListener(new MouseAdapter() {
-			final int n=list.indexOf(component);
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				onSelectItem(n);
-				repaint();
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				hovered = n;
-				onPointItem(n);
-				repaint();
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				hovered = -1;
-				repaint();
-			}
-		});
-		add(list.get(list.indexOf(component)));
-		revalidate();
-		repaint();
+		prepareComponent(component);
 		
 		return component;
 	}
-	public void removeItem(int n) {
+	public JComponent addItemAt(JComponent component, int n) {
+		list.add(n, component);
+		prepareComponent(component);
+		
+		return component;
+	}
+	public void removeItem(JComponent component) {
+		remove(component);
+		list.remove(component);
+		revalidate();
+		repaint();
+	}
+	public void removeItemAt(int n) {
 		remove(list.get(n));
 		list.remove(n);
 		revalidate();
@@ -168,8 +152,8 @@ public abstract class ListPanel extends Panel{
 	}
 	public void removeAllItems() {
 		while(list.size() > 0) {
-			removeItem(0);
-		}		
+			removeItemAt(0);
+		}
 	}
 	public void onHighLightBackground(Graphics2D g2d, int x, int y, int w, int h) {
 		if(hovered != -1) {
@@ -184,7 +168,18 @@ public abstract class ListPanel extends Panel{
 		}
 	}
 	public void onPointItem(int n) {}
+	
 	public abstract void onSelectItem(int n);
+	
+	public class DefaultItem extends JLabel{
+		private static final long serialVersionUID = -5588515571384403736L;
+		public DefaultItem(String str) {
+			super(str);
+			setOpaque(false);
+			setFont(Theme.h1);
+			setForeground(Theme.doc_color[1]);
+		}
+	}
 
 	private final void calculateClippings() {
 		clip_x = getMargine();
@@ -205,4 +200,31 @@ public abstract class ListPanel extends Panel{
 			}
 		});
 	}
+	private final void prepareComponent(JComponent component) {
+		component.addMouseListener(new MouseAdapter() {
+			final int n=list.indexOf(component);
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				onSelectItem(n);
+				repaint();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				hovered = n;
+				onPointItem(n);
+				repaint();
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				hovered = -1;
+				repaint();
+			}
+		});
+		
+		add(list.get(list.indexOf(component)));
+		
+		revalidate();
+		repaint();
+	}
+	
 }

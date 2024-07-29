@@ -1,10 +1,14 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 import javax.swing.JComponent;
@@ -103,9 +107,11 @@ public abstract class Table extends Panel{
 	public int[] getSelectedRows() {
 		return checked_rows;
 	}
-	public JComponent getValueAt(int row, int column) {
-		Row row_panel = (Row)list_panel.getItem(row);
-		return row_panel.getComponentAt(column);
+	public Row getRowAt(int row) {
+		return (Row)list_panel.getItem(row);
+	}
+	public JComponent getComponentAt(int row, int column) {
+		return getRowAt(row).getComponentAt(column);
 	}
 	public void setColumnWidth(int columnWidth) {
 		column_w = columnWidth;
@@ -145,30 +151,33 @@ public abstract class Table extends Panel{
 		});
 	}
 	public void addRow(JComponent components[]) {
-		list_panel.addItem(new Row(components)).setBackground(Theme.opacity((getRowCount()%2)==0 ? Theme.doc_color[0]: Theme.gray_shade[0], 0.25f));
+		addRow(new Row(components));
 		repaint();
 	}
-	public void removeRow(int n) {
-		list_panel.removeItem(n);
+	public void addRow(Row row) {
+		addRowAt(row, getRowCount());
+		repaint();
+	}
+	public void addRowAt(Row row, int n) {
+		Color bg_color = Theme.opacity((getRowCount()%2)==0 ? Theme.doc_color[0]: Theme.gray_shade[0], 0.25f);
+		list_panel.addItemAt(row, n).setBackground(bg_color);
+		repaint();
+	}
+	public void removeRow(Row row) {
+		if(row.getCheckBox().isPressed()) {
+			check_count--;
+		}
+		list_panel.removeItem(row);
+	}
+	public void removeRowAt(int n) {
+		if(getRowAt(n).getCheckBox().isPressed()) {
+			check_count--;
+		}
+		list_panel.removeItemAt(n);
 	}
 	public void removeAllRows() {
 		list_panel.removeAllItems();
-	}
-	public void checkSelectedRows() {
-		checked_rows = new int[getCheckCount()];
-		list_panel.getItemList().forEach(new Consumer<JComponent>() {
-			private CheckBox box;
-			private int i=0,n=0;
-			@Override
-			public void accept(JComponent comp) {
-				box = ((Row)comp).getCheckBox();
-				if(box.isPressed()) {
-					checked_rows[i] = n;
-					i++;
-				}
-				n++;
-			}
-		});
+		check_count = 0;
 	}
 	public void onTableResized(int w, int h) {
 		main_checkBox.setLocation(getMargine() + (getIndent()/2) - (main_checkBox.getWidth()/2), (column_h/2) - (main_checkBox.getHeight()/2));
@@ -211,7 +220,8 @@ public abstract class Table extends Panel{
 	public class Row extends Panel{
 		private static final long serialVersionUID = 1243781703141617946L;
 		private CheckBox check_box;
-		private JComponent comp[];
+		private ArrayList<JComponent> comp;
+		private Consumer<JComponent> comp_consumer;
 		private int c;
 		private Graphics2D g2d;
 		
@@ -244,14 +254,18 @@ public abstract class Table extends Panel{
 			};
 			add(check_box);
 			
-			comp = components;
-			for(int c=0; c<comp.length; c++) {
-				comp[c].setOpaque(false);
-				comp[c].setForeground(Theme.doc_color[1]);
-				comp[c].setFont(Theme.h1);
-				add(comp[c]);
+			comp = new ArrayList<JComponent>();
+			for(int c=0; c<components.length; c++) {
+				addCell(components[c]);
 			}
 			
+			comp_consumer = new Consumer<JComponent>() {
+				@Override
+				public void accept(JComponent cmp) {
+					cmp.setBounds(getIndent() + (getColumnWidth() * c), 0, getColumnWidth(), getHeight());
+					c++;
+				}
+			};
 		}
 		@Override
 		public void paint(Graphics g) {
@@ -263,15 +277,56 @@ public abstract class Table extends Panel{
 			super.paint(g2d);
 			
 			check_box.setBounds((getIndent()/2) - 5, (getHeight()/2) - 5, 10, 10);
-			for(c=0; c<comp.length; c++) {
-				comp[c].setBounds(getIndent() + (getColumnWidth() * c), 0, getColumnWidth(), getHeight());
-			}
+			c = 0;
+			comp.forEach(comp_consumer);
 		}
 		public CheckBox getCheckBox() {
 			return check_box;
 		}
 		public JComponent getComponentAt(int n) {
-			return comp[n];
+			return comp.get(n);
 		}
+		public void addCell(JComponent component) {
+			component.setOpaque(false);
+			component.setForeground(Theme.doc_color[1]);
+			component.setFont(Theme.h1);
+			component.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					getMouseListeners()[0].mouseClicked(e);
+				}
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					getMouseListeners()[0].mouseEntered(e);
+				}
+				@Override
+				public void mouseExited(MouseEvent e) {
+					getMouseListeners()[0].mouseExited(e);
+				}
+			});
+			comp.add(component);
+			add(component);
+		}
+		public void removeCell(JComponent component) {
+			comp.remove(component);
+			remove(component);
+		}
+	}
+
+	private void checkSelectedRows() {
+		checked_rows = new int[getCheckCount()];
+		list_panel.getItemList().forEach(new Consumer<JComponent>() {
+			private CheckBox box;
+			private int i=0,n=0;
+			@Override
+			public void accept(JComponent comp) {
+				box = ((Row)comp).getCheckBox();
+				if(box.isPressed()) {
+					checked_rows[i] = n;
+					i++;
+				}
+				n++;
+			}
+		});
 	}
 }

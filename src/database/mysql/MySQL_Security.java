@@ -1,13 +1,13 @@
 package database.mysql;
 
-import misc.enums.Role;
+import misc.enums.SecurityRole;
 
 public final class MySQL_Security{
 
 	private MySQL_Security() {
 		
 	}
-	public static Role getAccess(char password[]) {
+	public static SecurityRole getAccess(char password[]) {
 		String pass="";
 		for(char p: password) {
 			pass += p;
@@ -18,17 +18,17 @@ public final class MySQL_Security{
 		if(data.length > 0) {
 			String role = (String)data[0][0];
 			if(role.equals("adm")) {
-				return Role.ADMIN;
+				return SecurityRole.ADMIN;
 			}
 			else if(role.equals("emp")){
-				return Role.EMPLOYEE;
+				return SecurityRole.EMPLOYEE;
 			}
 			else {
-				return Role.NONE;
+				return SecurityRole.NONE;
 			}
 		}
 		else {
-			return Role.NONE;
+			return SecurityRole.NONE;
 		}
 	}
 }

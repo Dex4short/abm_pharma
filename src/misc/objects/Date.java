@@ -71,6 +71,10 @@ public class Date{
 		setMonth(getCurrentMonth());
 		setDay(getCurrentDay());
 	}
+	public java.sql.Date toSQLDate(){
+		return java.sql.Date.valueOf(toString());
+	}
+	
 	public static int getCurrentYear() {
 		return LocalDate.now().getYear();
 	}
@@ -106,5 +110,8 @@ public class Date{
 	}
 	public static int extractDay(String date) {
 		return Integer.parseInt(date.substring(8, 10));
+	}
+	public static Date parseDate(java.sql.Date date) {
+		return new Date(date.toString());
 	}
 }

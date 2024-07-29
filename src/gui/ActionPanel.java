@@ -30,14 +30,16 @@ public abstract class ActionPanel extends TittledPanel{
 	@Override
 	public void onResizeTitledPanel(int w, int h) {
 		getTittleLabel().setBounds(getMargine(), 0, w - (getMargine()*2), 30);
-		getTittleLabel().repaint();
 		getContentPane().setBounds(getMargine(), getTittleLabel().getHeight() + getMargine(), getTittleLabel().getWidth(), h-getTittleLabel().getHeight()-30-(getMargine()*2));
-		getContentPane().repaint();
 
 		cancel_lnk.setBounds(w-100-(getMargine()*2), h-getMargine()-30, 50, 30);
 		ok_btn.setBounds(w-50-getMargine(), h-getMargine()-30, 50, 30);
-
-		repaint();
+	}
+	public Button getOkButton() {
+		return ok_btn;
+	}
+	public Link getCancelLink() {
+		return cancel_lnk;
 	}
 	public abstract void onOk();
 	public abstract void onCancel();

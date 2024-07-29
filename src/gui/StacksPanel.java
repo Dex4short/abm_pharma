@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
 
 public abstract class StacksPanel extends Panel{
 	private static final long serialVersionUID = 8182176255182230327L;
@@ -28,6 +29,9 @@ public abstract class StacksPanel extends Panel{
 			private static final long serialVersionUID = 756774899253711353L;
 			{
 				add(panel);
+				addMouseListener(new MouseAdapter() {
+					//disable clicking through
+				});
 			}
 			@Override
 			public void paint(Graphics g) {

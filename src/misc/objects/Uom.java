@@ -1,27 +1,37 @@
 package misc.objects;
 
+import misc.enums.UomType;
+
 public class Uom {
-	private String unit_name;
+	private int uom_id;
+	private UomType unit_type;
 	private int unit_size;
 	private Uom sub_uom;
 	
-	public Uom(String unitName, int unitSize, Uom subUom) {
-		setUnitName(unitName);
+	public Uom(int uom_id, UomType uomType, int unitSize, Uom subUom) {
+		setUomId(uom_id);
+		setUnitType(uomType);
 		setUnitSize(unitSize);
 		setSubUom(subUom);
 	}
 	@Override
 	public String toString() {
-		String str = "[" + getUnitName() + " : " + getUnitSize() + "]";
+		String str = "[" + getUnitType() + " : " + getUnitSize() + "]";
 		Uom sub_uom = getSubUom();
 		while(sub_uom != null) {
-			str += " -> [" + sub_uom.getUnitName() + " : " + sub_uom.getUnitSize() + "]";
+			str += " -> [" + sub_uom.getUnitType() + " : " + sub_uom.getUnitSize() + "]";
 			sub_uom = sub_uom.getSubUom();
 		}
 		return str;
 	}
-	public String getUnitName() {
-		return unit_name;
+	public int getUomId() {
+		return uom_id;
+	}
+	public void setUomId(int uom_id) {
+		this.uom_id = uom_id;
+	}
+	public UomType getUnitType() {
+		return unit_type;
 	}
 	public int getUnitSize() {
 		return unit_size;
@@ -29,8 +39,8 @@ public class Uom {
 	public Uom getSubUom() {
 		return sub_uom;
 	}
-	public void setUnitName(String unitName) {
-		unit_name = unitName;
+	public void setUnitType(UomType unitType) {
+		unit_type = unitType;
 	}
 	public void setUnitSize(int unitSize) {
 		unit_size = unitSize;

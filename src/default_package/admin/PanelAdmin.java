@@ -6,7 +6,9 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 
-import default_package.admin.inventory.ViewInventory;
+import default_package.admin.disposal.PanelDisposal;
+import default_package.admin.inventory.PanelInventory;
+import default_package.admin.reserves.PanelReserves;
 import gui.Panel;
 import gui.Tabs;
 import misc.interfaces.Theme;
@@ -23,20 +25,24 @@ public class PanelAdmin extends Panel{
 		
 		img = Toolkit.getDefaultToolkit().getImage("res/ABM LOGO 2.png");
 		
-		String labels[] = {"Inventory", "Transactions", "Depository", "Disposal", "Product Returns", "Statistics"};
+		String labels[] = {"Inventory", "Transactions", "Reserves", "Disposal", "Product Returns", "Statistics"};
 		tabs = new Tabs(labels) {
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Panel changePanel(int selected) {
 				switch (selected) {
 				case 0:
-					return openTabInventory();
+					return new PanelInventory();
+				case 2:
+					return new PanelReserves();
+				case 3:
+					return new PanelDisposal();
 				default:
 					return new Panel();
 				}
 			}
 		};
-		tabs.setPanel(new ViewInventory());
+		tabs.setPanel(new PanelInventory());
 		add(tabs);
 		
 	}
@@ -62,8 +68,5 @@ public class PanelAdmin extends Panel{
 		g2d.fillRect(0, 50, getWidth(), getHeight()-60);
 		
 		super.paint(g2d);
-	}
-	private final ViewInventory openTabInventory() {
-		return new ViewInventory();
 	}
 }

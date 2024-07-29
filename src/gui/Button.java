@@ -96,21 +96,24 @@ public abstract class Button extends Panel implements Theme{
 		g2d.drawRoundRect( 0, 0, getWidth()-1, getHeight()-1, getArc(), getArc());
 
 	}
-	public void setEnabled(boolean enabled) {
-		super.setEnabled(enabled);
+	public void setEnabled(boolean enable) {
+		super.setEnabled(enable);
 		
-		for(MouseListener m_l :getMouseListeners()) {
-			if(m_l == m_listener) {
-				if(!enabled) {
-					removeMouseListener(m_listener);
-					setBackground(Theme.opacity(getBackground(), 0.25f));
-				}
-				return;
+		boolean found = false;
+		for(MouseListener m: getMouseListeners()) {
+			found = (m == m_listener);
+			if(found) {
+				break;
 			}
 		}
-		
-		addMouseListener(m_listener);
-		setBackground(Theme.opacity(getBackground(), 1f));
+		if(!found && enable==true) {
+			addMouseListener(m_listener);
+			setBackground(Theme.opacity(getBackground(), 1f));
+		}
+		else if(found && enable==false){
+			removeMouseListener(m_listener);
+			setBackground(Theme.opacity(getBackground(), 0.25f));
+		}
 		
 		repaint();
 	}

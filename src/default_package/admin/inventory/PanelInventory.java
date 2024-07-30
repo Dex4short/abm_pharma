@@ -73,7 +73,6 @@ public class PanelInventory extends Panel implements Icons, UICustoms{
 			btn[i].setLocation(getWidth() - (35 * i) - btn[0].getWidth(), 0);
 		}
 		table.setBounds(-10, 40, width+20, height-40);
-		repaint();
 	}
 	
 	private class PrintButton extends Button{

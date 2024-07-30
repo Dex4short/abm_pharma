@@ -1,14 +1,15 @@
 package misc.objects;
 
 public class Packaging {
-	private int pack_id;
+	private int pack_id, parentPack_id;
 	private Quantity qty;
 	private Uom uom;
 	
-	public Packaging(int pack_id, Quantity qty, Uom uom) {
+	public Packaging(int pack_id, Quantity qty, Uom uom, int parentPack_id) {
 		setPackId(pack_id);
 		setQty(qty);
 		setUom(uom);
+		setPackId(parentPack_id);
 	}
 	public int getPackId() {
 		return pack_id;
@@ -27,5 +28,11 @@ public class Packaging {
 	}
 	public void setUom(Uom uom) {
 		this.uom = uom;
+	}
+	public int getParentPackId() {
+		return parentPack_id;
+	}
+	public void setParentPackId(int parentPack_id) {
+		this.parentPack_id = parentPack_id;
 	}
 }

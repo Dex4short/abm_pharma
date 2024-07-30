@@ -13,7 +13,8 @@ public interface Icons {
 	AddIcon = getIcon("res/add.png"),
 	CheckIcon = getIcon("res/check.png"),
 	InventoryIcon = getIcon("res/inventory.png"),
-	ReserveIcon = getIcon("res/reserve.png");
+	ReserveIcon = getIcon("res/reserve.png"),
+	ReturnIcon = getIcon("res/return.png");
 
 	public static ImageIcon getIcon(String path) {
 		return new ImageIcon(Toolkit.getDefaultToolkit().getImage(path)); 

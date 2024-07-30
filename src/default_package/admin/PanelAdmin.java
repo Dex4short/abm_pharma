@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import default_package.admin.disposal.PanelDisposal;
 import default_package.admin.inventory.PanelInventory;
 import default_package.admin.reserves.PanelReserves;
+import default_package.admin.transactions.PanelTransactions;
 import gui.Panel;
 import gui.Tabs;
 import misc.interfaces.Theme;
@@ -25,7 +26,7 @@ public class PanelAdmin extends Panel{
 		
 		img = Toolkit.getDefaultToolkit().getImage("res/ABM LOGO 2.png");
 		
-		String labels[] = {"Inventory", "Transactions", "Reserves", "Disposal", "Product Returns", "Statistics"};
+		String labels[] = {"Inventory", "Transactions", "Reserves", "Disposal", "Product Returns", "Statistics", "Customers"};
 		tabs = new Tabs(labels) {
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -33,6 +34,8 @@ public class PanelAdmin extends Panel{
 				switch (selected) {
 				case 0:
 					return new PanelInventory();
+				case 1:
+					return new PanelTransactions();
 				case 2:
 					return new PanelReserves();
 				case 3:

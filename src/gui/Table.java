@@ -89,6 +89,13 @@ public abstract class Table extends Panel{
 	public int getColumnWidth() {
 		return column_w;
 	}
+	public String[] getColumnLabels() {
+		String column_labels[] = new String[columns];
+		for(int i=0; i<columns; i++) {
+			column_labels[i] = column[i].getText();
+		}
+		return column_labels;
+	}
 	public int getRowHeight() {
 		return list_panel.getItemHeight();
 	}
@@ -226,8 +233,6 @@ public abstract class Table extends Panel{
 		private Graphics2D g2d;
 		
 		public Row(JComponent components[]) {
-			setLayout(null);
-			setOpaque(false);
 			setIndent(30);
 			
 			check_box = new CheckBox() {
@@ -277,6 +282,10 @@ public abstract class Table extends Panel{
 			super.paint(g2d);
 			
 			check_box.setBounds((getIndent()/2) - 5, (getHeight()/2) - 5, 10, 10);
+		}
+		@Override
+		public void setBounds(int x, int y, int width, int height) {
+			super.setBounds(x, y, width, height);
 			c = 0;
 			comp.forEach(comp_consumer);
 		}

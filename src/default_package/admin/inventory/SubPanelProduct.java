@@ -12,7 +12,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import customs.DateLabel;
-import database.mysql.MySQL;
 import default_package.ABM_Pharma;
 import gui.ActionPanel;
 import gui.Button;
@@ -104,10 +103,17 @@ public abstract class SubPanelProduct extends ActionPanel implements TableConsta
 	@Override
 	public void onOk() {
 		int
-		inv_id   = MySQL.nextUID("inv_id", "inventory"),
-		item_id  = MySQL.nextUID("item_id", "items"),
-		pack_id  = MySQL.nextUID("pack_id", "packaging"),
-		price_id = MySQL.nextUID("price_id", "pricing");
+		inv_id = -1,
+		item_id = -1,
+		pack_id = -1,
+		price_id = -1;
+		
+		if(product != null) {
+			inv_id = product.getInvId();
+			item_id = product.getItem().getItemId();
+			pack_id = product.getPackaging().getPackId();
+			price_id = product.getPricing().getPriceId();
+		}
 		
 		try {
 			setProduct(new Product(
@@ -124,7 +130,8 @@ public abstract class SubPanelProduct extends ActionPanel implements TableConsta
 					new Packaging(
 						pack_id, 
 						(Quantity)getValue(qty),
-						(Uom)getValue(uom)
+						(Uom)getValue(uom),
+						-1 //no parent pack id yet
 					),
 					new Pricing(
 						price_id,
@@ -289,8 +296,8 @@ public abstract class SubPanelProduct extends ActionPanel implements TableConsta
 		public QtyField(String qty, String size){
 			super(qty, size);
 			setDivider('/');
-			getLeftIntegerField().setCharacterLimit(11);
-			getRightIntegerField().setCharacterLimit(11);
+			getLeftIntegerField().setCharacterLimit(4);
+			getRightIntegerField().setCharacterLimit(4);
 		}
 		@Override
 		public void setBounds(int x, int y, int width, int height) {

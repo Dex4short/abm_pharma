@@ -3,12 +3,10 @@ package gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
 import misc.interfaces.Drawable;
@@ -21,7 +19,6 @@ public abstract class Tabs extends Panel{
 	private Panel frame,panel;
 
 	public Tabs(String labels[]) {
-		setLayout(null);
 		setOpaque(false);
 		setTabSize(100, 40);
 		
@@ -70,12 +67,16 @@ public abstract class Tabs extends Panel{
 				super.paint(g2d);
 			}
 		};
-		frame.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		frame.setBackground(Theme.doc_color[0]);
-		frame.setLayout(new GridLayout(1, 1));
-		frame.setOpaque(false);
+		frame.setMargine(10);
 		frame.add(panel = new Panel());
 		add(frame);
+	}
+	@Override
+	public void setBounds(int x, int y, int width, int height) {
+		super.setBounds(x, y, width, height);
+		frame.setBounds(0, th, width, height-th);
+		panel.setBounds(frame.getMargine(), frame.getMargine(), frame.getWidth() - (frame.getMargine()*2), frame.getHeight() - (frame.getMargine()*2));
 	}
 	public void setTabSize(int w, int h) {
 		tw = w;
@@ -92,12 +93,6 @@ public abstract class Tabs extends Panel{
 		panel = new_panel;
 		frame.add(panel);
 		revalidate();
-		repaint();
-	}
-	@Override
-	public void setBounds(int x, int y, int width, int height) {
-		super.setBounds(x, y, width, height);
-		frame.setBounds(0, th, width, height-th);
 		repaint();
 	}
 	public abstract Panel changePanel(int togled);

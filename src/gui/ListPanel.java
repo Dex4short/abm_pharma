@@ -22,13 +22,11 @@ public abstract class ListPanel extends Panel{
 	private int item_h, item_w, r, hovered, clip_x, clip_y, clip_w, clip_h;
 	private VerticalScrollBar v_scroll_bar;
 	private ArrayList<JComponent> list;
+	private Consumer<JComponent> list_consumer;
 	private Graphics2D g2d;
 	private Color highlight_background,highlight_foreground;
 
-	public ListPanel() {
-		setLayout(null);
-		setOpaque(false);
-		
+	public ListPanel() {		
 		setBackground(Theme.doc_color[0]);
 		setForeground(Theme.opacity(Theme.gray_shade[0], 0.50f));
 		setHighlightBackground(Theme.gray_shade[0]);
@@ -39,6 +37,13 @@ public abstract class ListPanel extends Panel{
 		setMargine(10);
 		
 		list = new ArrayList<JComponent>();
+		list_consumer = new Consumer<JComponent>() {
+			@Override
+			public void accept(JComponent comp) {
+				comp.setBounds(clip_x, clip_y  + (int)((getItemHeight() * r) - v_scroll_bar.getScrollY()), getItemWidth(), getItemHeight());
+				r++;
+			}
+		};
 		
 		v_scroll_bar = new VerticalScrollBar() {
 			private static final long serialVersionUID = -8856133957642873324L;
@@ -64,7 +69,7 @@ public abstract class ListPanel extends Panel{
 		hovered = -1;
 	}
 	@Override
-	public void paint(Graphics g) {
+	public void paint(Graphics g) {		
 		g2d = (Graphics2D)g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
@@ -79,16 +84,22 @@ public abstract class ListPanel extends Panel{
 		super.paint(g2d);
 		onHighLightForeground(g2d, clip_x, clip_y + (int)((getItemHeight() * hovered) - v_scroll_bar.getScrollY()), getItemWidth(), getItemHeight());
 		g2d.setClip(0, 0, getWidth(), getHeight());
-		
+
 		calculateItemBounds();
 	}
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
-		calculateClippings();
-		calculateItemWidth();
-		calculateItemBounds();
+		clip_x = getMargine();
+		clip_y = getMargine();
+		clip_w = getWidth() - (getMargine()*2);
+		clip_h = getHeight() - (getMargine()*2);
+		
 		v_scroll_bar.setBounds(getWidth() - 5 - getMargine(), getMargine(), 5, clip_h);
+
+		item_w = clip_w - v_scroll_bar.getWidth() - getMargine();
+		
+		calculateItemBounds();
 	}
 	public void setItemHeight(int item_height) {
 		this.item_h = item_height;
@@ -181,24 +192,9 @@ public abstract class ListPanel extends Panel{
 		}
 	}
 
-	private final void calculateClippings() {
-		clip_x = getMargine();
-		clip_y = getMargine();
-		clip_w = getWidth() - (getMargine()*2);
-		clip_h = getHeight() - (getMargine()*2);
-	}
-	private final void calculateItemWidth() {
-		item_w = clip_w - v_scroll_bar.getWidth() - getMargine();
-	}
 	private final void calculateItemBounds() {
 		r=0;
-		list.forEach(new Consumer<JComponent>() {
-			@Override
-			public void accept(JComponent comp) {
-				comp.setBounds(clip_x, clip_y  + (int)((getItemHeight() * r) - v_scroll_bar.getScrollY()), getItemWidth(), getItemHeight());
-				r++;
-			}
-		});
+		list.forEach(list_consumer);
 	}
 	private final void prepareComponent(JComponent component) {
 		component.addMouseListener(new MouseAdapter() {

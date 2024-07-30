@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -76,18 +77,43 @@ public abstract class SearchBar extends JPanel{
 		setArc(25);
 		
 		addComponentListener(new ComponentAdapter() {
-			int width,height;
+			int width,height,maxSize;
+			{
+				FontMetrics metrics = getFontMetrics(getFont());
+				
+				maxSize = 0;
+				int size=0;
+				for(String str: filter_list) {
+					size = metrics.stringWidth(str);
+					if(maxSize < size) {
+						maxSize = size;
+					}
+				}
+			}
 			@Override
 			public void componentResized(ComponentEvent e) {
 				width = getWidth();
 				height = getHeight();			
 				
-				filter_button.setBounds(0, 0, 115, height);
+				filter_button.setBounds(0, 0, maxSize + 50, height);
 				txt_field.setBounds(filter_button.getWidth() + 10, 0, width - filter_button.getWidth() - 10 - (arc * 2), height);
 				search_button.setBounds(txt_field.getX() + txt_field.getWidth() + 2, 2, width - (txt_field.getX() + txt_field.getWidth()) - 4, height - 4);
 				filter_listPanel.setBounds(0, getY() + height, width, 100);
 			}
 		});
+	}
+	@Override
+	public void paint(Graphics g) {
+		g2d = (Graphics2D)g;
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		
+		g2d.setColor(Theme.doc_color[0]);
+		g2d.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
+		
+		g2d.setColor(Theme.gray_shade[0]);
+		g2d.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, arc, arc);
+		
+		super.paint(g2d);
 	}
 	public ListPanel getFilterListPanel() {
 		return filter_listPanel;
@@ -160,19 +186,6 @@ public abstract class SearchBar extends JPanel{
 		closeFilter();
 	}
 	public abstract void onSearch();
-	@Override
-	public void paint(Graphics g) {
-		g2d = (Graphics2D)g;
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		
-		g2d.setColor(Theme.doc_color[0]);
-		g2d.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
-		
-		g2d.setColor(Theme.gray_shade[0]);
-		g2d.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, arc, arc);
-		
-		super.paint(g2d);
-	}
 	public static Drawable getFilterIcon() {
 		return new Drawable() {
 			@Override

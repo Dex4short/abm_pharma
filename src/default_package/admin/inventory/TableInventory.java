@@ -1,6 +1,7 @@
 package default_package.admin.inventory;
 
 import customs.tables.TableProducts;
+import database.mysql.MySQL;
 import database.mysql.MySQL_Inventory;
 import misc.enums.ItemCondition;
 import misc.objects.Product;
@@ -13,8 +14,9 @@ public abstract class TableInventory extends TableProducts{
 		
 	}
 	public void addInventoryProduct(Product product) {
+		product.setInvId(MySQL.nextUID("inv_id", "inventory"));
 		MySQL_Inventory.insertProduct(product, ItemCondition.STORED);
-		
+
 		TableProductRow 
 		inv_row = createTableProductRow(product);
 		

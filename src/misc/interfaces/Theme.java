@@ -24,7 +24,8 @@ public interface Theme {
 	},
 	shadow = new Color( 0, 0, 0, 100);
 	public static Font
-	h1 = new Font("Arial", Font.BOLD, 11);
+	h1 = new Font("Arial", Font.BOLD, 11),
+	h2 = new Font("Arial Rounded MT", Font.BOLD, 12);
 	
 	public static Color opacity(Color color, float opacity) {
 		return new Color(color.getRed(), color.getGreen(), color.getBlue(), (int)(255 * opacity));

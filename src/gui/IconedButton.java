@@ -30,14 +30,12 @@ public abstract class IconedButton extends Button{
 		});
 	}
 	private final void iconed_button(Drawable drawable) {
-		
 		setArc(25);
 		setBackground(new Color(0,0,0,0));
 		setForeground(Theme.gray_shade[0]);
 		setHighlight(Theme.gray_shade[1]);
 		setPressedColor(getBackground());
 		
-		setLayout(null);
 		getLabel().setHorizontalAlignment(JLabel.LEFT);
 		setDrawable(drawable);
 	}

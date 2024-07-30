@@ -61,7 +61,6 @@ public abstract class VerticalScrollBar extends Panel{
 		super.setBounds(x, y, width, height);
 		calculateViewLength();
 		calculateBarLength();
-		repaint();
 	}
 	public void setScrollY(float percent) {
 		calculateScrollY((getHeight()-barLength) * percent);

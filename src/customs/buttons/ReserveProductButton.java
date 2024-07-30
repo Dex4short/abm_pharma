@@ -11,7 +11,7 @@ import misc.objects.Date;
 import misc.objects.Remarks;
 import misc.objects.Time;
 
-public abstract class ReserveProductButton  extends Button implements UICustoms, Icons{
+public abstract class ReserveProductButton extends Button implements UICustoms, Icons{
 	private static final long serialVersionUID = -4074774662182951765L;
 	public ReserveProductButton() {
 		super(ReserveIcon);

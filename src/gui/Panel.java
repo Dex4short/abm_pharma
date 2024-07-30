@@ -9,7 +9,6 @@ public class Panel extends JPanel{
 	public Panel() {
 		setOpaque(false);
 		setLayout(null);
-		
 	}
 	public void setArc(int arc) {
 		this.arc = arc;

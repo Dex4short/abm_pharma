@@ -1,4 +1,10 @@
 package default_package;
+
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.swing.JFrame;
 
 import default_package.admin.PanelAdmin;
@@ -17,6 +23,7 @@ public class WindowMain extends JFrame{
 	
 	public WindowMain() {
 		setTitle("ABM System Pharma");
+		setBackground(Theme.main_color[2]);
 		
 		display_panel = new DisplayPanel();
 		setContentPane(display_panel);
@@ -32,7 +39,6 @@ public class WindowMain extends JFrame{
 				
 			}
 		};
-		stacks_panel.setOpaque(true);
 		stacks_panel.setBackground(Theme.main_color[2]);
 		stacks_panel.pushPanel(new PanelLogin() {
 			private static final long serialVersionUID = 8576528911235392926L;
@@ -48,6 +54,24 @@ public class WindowMain extends JFrame{
 		});
 		display_panel.add(stacks_panel);
 		
+		addWindowStateListener(new WindowStateListener() {
+			int t;
+			@Override
+			public void windowStateChanged(WindowEvent e) {
+				t=0;
+				new Timer().scheduleAtFixedRate(new TimerTask() {
+					@Override
+					public void run() {
+						repaint();
+						
+						t++;
+						if(t==2) {
+							cancel();
+						}
+					}
+				}, 0, 50);
+			}
+		});
 	}
 	private final void initializePanelAdmin() {
 		stacks_panel.popPanel();

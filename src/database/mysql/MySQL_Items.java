@@ -7,7 +7,7 @@ public class MySQL_Items {
 	public static String ItemsColumns[] = {"item_id", "item_no", "description", "lot_no", "date_added", "exp_date", "brand"};
 	
 	public static void insertItem(Item item) {
-		
+		item.setItemId(MySQL.nextUID("item_id", "items"));
 		Object values[] = {
 				item.getItemId(),
 				item.getItemNo(),

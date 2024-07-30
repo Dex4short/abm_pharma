@@ -30,7 +30,6 @@ public abstract class Button extends Panel implements Theme{
 	}
 	private final void button(JLabel lbl) {
 		setLayout(new GridLayout(1, 1));
-		setOpaque(false);
 		
 		label = lbl;
 		label.setOpaque(false);

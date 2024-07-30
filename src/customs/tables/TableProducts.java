@@ -31,6 +31,8 @@ public abstract class TableProducts extends Table implements TableConstants.Prod
 			inv_row = createTableProductRow(product);
 			addRow(inv_row);
 		}
+		
+		onSelectTable(new int[] {});//refresh check boxes
 	}
 	public Product[] getSelectedProducts() {
 		int

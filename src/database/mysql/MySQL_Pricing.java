@@ -10,7 +10,7 @@ public class MySQL_Pricing {
 	public static String PricingColumns[] = {"price_id", "cost", "unit_price", "discount", "unit_amount"};
 	
 	public static void insertPricing(Pricing pricing) {
-		
+		pricing.setPriceId(MySQL.nextUID("price_id", "pricing"));
 		Object values[] = {
 				pricing.getPriceId(),
 				pricing.getCost().toBigDecimal(),

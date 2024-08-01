@@ -6,19 +6,46 @@ create table security(sec_id int, password varchar(16), role varchar(3));
 insert into security values(0, 'admin', 'adm');
 insert into security values(0, 'employee', 'emp');
 
+create table inventory(inv_id int, item_id int, pack_id int, price_id int, rem_id int, item_condition varchar(9));
+
 create table items(item_id int, item_no varchar(8), description varchar(64), lot_no varchar(8), date_added date, exp_date date, brand varchar(32));
 
-create table packaging(pack_id int, qty int, size int, uom_id int);
+create table packaging(pack_id int, qty int, size int, uom_id int, parentPack_id int);
 
 create table uom(uom_id int, name varchar(16), size int, subUom_id int);
 
-create table pricing(price_id int, cost decimal(10,2), unit_price decimal(10,2), discount varchar(4), unit_amount decimal(10,2));
+create table pricing(price_id int, cost decimal(12,2), unit_price decimal(12,2), discount varchar(4), unit_amount decimal(12,2));
 
-create table inventory(inv_id int, item_id int, pack_id int, price_id int);
+create table remarks(rem_id int, rem_date Date, rem_time Time, details varchar(64));
 
-create table uid(table_name varchar(16), next_id int);
-insert into uid values('security', 2);
-insert into uid values('packaging', 1);
-insert into uid values('uom', 1);
-insert into uid values('pricing', 1);
-insert into uid values('inventory', 1);
+-----sample queries-----
+
+1.) getting all items from inventory:
+select 
+	a.item_no, 
+	a.description, 
+	a.lot_no, 
+	a.date_added, 
+	a.exp_date, 
+	a.brand, 
+	b.qty, 
+	c.name, 
+	d.cost, 
+	d.unit_price, 
+	d.discount, 
+	d.unit_amount
+from
+	items as a  
+	join 
+	packaging as b 
+	join 
+	uom as c 
+	join 
+	pricing as d 
+	join 
+	inventory as e 
+on
+	e.item_id = a.item_id and 
+	e.pack_id = b.pack_id and b.uom_id = c.uom_id and 
+	e.price_id = d.price_id;
+	

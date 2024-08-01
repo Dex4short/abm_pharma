@@ -1,6 +1,7 @@
 package default_package.employee.counter;
 
 import java.awt.Color;
+import java.awt.Toolkit;
 
 import javax.swing.JLabel;
 
@@ -83,6 +84,12 @@ public abstract class SubPanelQty extends ActionPanel implements UnitConverter{
 		qty2 = qty_field.getNumber();
 		
 		byproducts = subtractUnits(product, uom1, qty1, uom2, qty2);
+		if(byproducts == null) {
+			ABM_Pharma.getWindow().getDisplayPanel().floatMessage("Insuficient unit quantity.");
+			Toolkit.getDefaultToolkit().beep();
+			return;
+		}
+		
 		onProductQtyOk(byproducts);
 	}
 	@Override

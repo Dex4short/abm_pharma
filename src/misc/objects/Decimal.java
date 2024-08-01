@@ -6,6 +6,9 @@ import java.text.DecimalFormat;
 public class Decimal {
 	private BigDecimal bigdecimal_value;
 	
+	public Decimal() {
+		this.bigdecimal_value = new BigDecimal("0.00");
+	}
 	public Decimal(BigDecimal bigdecimal_value) {
 		this.bigdecimal_value = bigdecimal_value;
 	}
@@ -16,4 +19,5 @@ public class Decimal {
 	public BigDecimal toBigDecimal() {
 		return bigdecimal_value;
 	}
+	
 }

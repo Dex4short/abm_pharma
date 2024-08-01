@@ -9,7 +9,18 @@ public class Packaging {
 		setPackId(pack_id);
 		setQty(qty);
 		setUom(uom);
-		setPackId(parentPack_id);
+		setParentPackId(parentPack_id);
+	}
+	@Override
+	public String toString() {
+		String str = 
+			"Packaging( pack_id:" + getPackId() + " )\n" +
+			"\t" + getQty().toString() + "\n" +
+			"\t" + getUom().toString() + "\n" +
+			"\t" + getParentPackId() + "\n"
+		;
+				
+		return str;
 	}
 	public int getPackId() {
 		return pack_id;

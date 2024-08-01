@@ -12,6 +12,16 @@ public class Remarks {
 		setTime(time);
 		setDetails(details);
 	}
+	@Override
+	public String toString() {
+		String str = 
+			"Remarks( rem_id:" + getRemId() + " )\n" +
+			"\t" + getDate() + "\n" +
+			"\t" + getTime() + "\n" +
+			"\t" + getDetails() + "\n"
+		;	
+		return str;
+	}
 	public int getRemId() {
 		return rem_id;
 	}

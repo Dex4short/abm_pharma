@@ -8,7 +8,7 @@ public abstract class TableDisposals extends TableProducts{
 	private static final long serialVersionUID = 8490964193344844806L;
 
 	public TableDisposals() {
-		
+		displayDisposedProducts();
 	}
 	public void displayDisposedProducts(){
 		displayProducst(ItemCondition.DISPOSED);

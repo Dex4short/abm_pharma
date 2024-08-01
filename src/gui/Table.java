@@ -34,6 +34,7 @@ public abstract class Table extends Panel{
 			@Override
 			public void onCheck(boolean toggled) {
 				onClickMainCheckBox(toggled);
+				list_panel.repaint();
 			}
 		};
 		
@@ -47,7 +48,14 @@ public abstract class Table extends Panel{
 			public void onPointItem(int n) {
 				onPointTable(n);
 			}
+			@Override
+			public void onHighLightBackground(Graphics2D g2d, int x, int y, int w, int h, int selected, float y_translate) {
+				for(int selected_rows: getSelectedRows()) {
+					super.onHighLightBackground(g2d, x, y, w, h, selected_rows, y_translate);
+				}
+			}
 		};
+		list_panel.setSelectedItemIndex(-1);
 		list_panel.setForeground(Theme.doc_color[0]);
 		list_panel.setHighlightBackground(Theme.gray_shade[0]);
 		list_panel.setHighlightForeground(Theme.gray_shade[0]);
@@ -59,6 +67,7 @@ public abstract class Table extends Panel{
 		setColumns(column_labels);
 		setColumnHeight(30);
 		setRowHeight(30);
+		
 		
 		addComponentListener(new ComponentAdapter() {
 			@Override
@@ -241,6 +250,7 @@ public abstract class Table extends Panel{
 				public void onCheck(boolean toggled) {
 					checkSelectedRows();
 					onSelectTable(getSelectedRows());
+					list_panel.repaint();
 				}
 				@Override
 				public void setPressed(boolean press) {
@@ -324,6 +334,7 @@ public abstract class Table extends Panel{
 
 	private void checkSelectedRows() {
 		checked_rows = new int[getCheckCount()];
+		
 		list_panel.getItemList().forEach(new Consumer<JComponent>() {
 			private CheckBox box;
 			private int i=0,n=0;
@@ -337,5 +348,12 @@ public abstract class Table extends Panel{
 				n++;
 			}
 		});
+		
+		if(check_count == 0) {
+			list_panel.setSelectedItemIndex(-1);
+		}
+		else {
+			list_panel.setSelectedItemIndex(checked_rows[check_count-1]);
+		}
 	}
 }

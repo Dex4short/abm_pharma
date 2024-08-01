@@ -5,7 +5,7 @@ import misc.objects.Percentage;
 
 public interface Accountancy {
 
-	public static Decimal calculateUnitAmount(Decimal unit_price, Percentage discount) {
+	public default Decimal calculateUnitAmount(Decimal unit_price, Percentage discount) {
 		return new Decimal(
 				unit_price.toBigDecimal().subtract(
 						unit_price.toBigDecimal().multiply(

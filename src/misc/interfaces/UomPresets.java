@@ -7,9 +7,9 @@ public interface UomPresets {
 	public final Uom Uom_Preset[] = {
 			new Uom(-1, UomType.box, 1, null),
 			new Uom(-1, UomType.pieces, 1, null),
-			new Uom(-1, UomType.box, 1, new Uom(-1, UomType.pieces, 10, null)),
-			new Uom(-1, UomType.box, 1, new Uom(-1, UomType.stab, 10, new Uom(-1, UomType.capsule, 10, null))),
-			new Uom(-1, UomType.box, 1, new Uom(-1, UomType.stab, 10, new Uom(-1, UomType.tablet, 10, null))),
+			new Uom(-1, UomType.box, 1, new Uom(-1, UomType.pieces, -1, null)),
+			new Uom(-1, UomType.box, 1, new Uom(-1, UomType.stab, -1, new Uom(-1, UomType.capsule, 10, null))),
+			new Uom(-1, UomType.box, 1, new Uom(-1, UomType.stab, -1, new Uom(-1, UomType.tablet, 10, null))),
 			new Uom(-1, UomType.box, 1, new Uom(-1, UomType.sachet, -1, null)),
 			new Uom(-1, UomType.stab, 1, new Uom(-1, UomType.capsule, 10, null)),
 			new Uom(-1, UomType.stab, 1, new Uom(-1, UomType.tablet, 10, null)),
@@ -17,7 +17,7 @@ public interface UomPresets {
 			new Uom(-1, UomType.tablet, 1, null),
 			new Uom(-1, UomType.bag, 1, null),
 			new Uom(-1, UomType.bag, 1, new Uom(-1, UomType.sachet, -1, null)),
-			new Uom(-1, UomType.sachet, -1, null),
+			new Uom(-1, UomType.sachet, 1, null),
 			new Uom(-1, UomType.jar, 1, null),
 	};
 	public final String Uom_Sizes[] = {"4", "6", "8", "10", "12", "14"};	

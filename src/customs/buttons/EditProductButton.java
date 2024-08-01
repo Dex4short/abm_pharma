@@ -13,7 +13,7 @@ public abstract class EditProductButton  extends Button implements UICustoms,Ico
 	
 	public EditProductButton() {
 		super(PencilIcon);
-		custom_button_appearance(this);
+		custom_button_appearance1(this);
 		setEnabled(false);
 	}
 	@Override

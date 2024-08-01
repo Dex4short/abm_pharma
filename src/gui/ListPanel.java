@@ -19,12 +19,13 @@ import misc.interfaces.Theme;
 
 public abstract class ListPanel extends Panel{
 	private static final long serialVersionUID = 1L;
-	private int item_h, item_w, r, hovered, clip_x, clip_y, clip_w, clip_h;
+	private int item_h, item_w, r, hovered, selected, clip_x, clip_y, clip_w, clip_h;
 	private VerticalScrollBar v_scroll_bar;
 	private ArrayList<JComponent> list;
 	private Consumer<JComponent> list_consumer;
 	private Graphics2D g2d;
 	private Color highlight_background,highlight_foreground;
+	private boolean isSelectionEnabled;
 
 	public ListPanel() {		
 		setBackground(Theme.doc_color[0]);
@@ -35,6 +36,7 @@ public abstract class ListPanel extends Panel{
 		setArc(10);
 		setItemHeight(20);
 		setMargine(10);
+		setSelectionEnabled(true);
 		
 		list = new ArrayList<JComponent>();
 		list_consumer = new Consumer<JComponent>() {
@@ -80,9 +82,17 @@ public abstract class ListPanel extends Panel{
 		g2d.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, getArc(), getArc());
 		
 		g2d.setClip(clip_x, clip_y, clip_w, clip_h);
-		onHighLightBackground(g2d, clip_x, clip_y + (int)((getItemHeight() * hovered) - v_scroll_bar.getScrollY()), getItemWidth(), getItemHeight());
+		
+		if(selected != -1 && isSelectionEnabled) {
+			onHighLightBackground(g2d, clip_x, clip_y, getItemWidth(), getItemHeight(), selected, v_scroll_bar.getScrollY());
+		}
+		
 		super.paint(g2d);
-		onHighLightForeground(g2d, clip_x, clip_y + (int)((getItemHeight() * hovered) - v_scroll_bar.getScrollY()), getItemWidth(), getItemHeight());
+
+		if(hovered != -1) {
+			onHighLightForeground(g2d, clip_x, clip_y, getItemWidth(), getItemHeight(), hovered, v_scroll_bar.getScrollY());
+		}
+		
 		g2d.setClip(0, 0, getWidth(), getHeight());
 
 		calculateItemBounds();
@@ -101,14 +111,29 @@ public abstract class ListPanel extends Panel{
 		
 		calculateItemBounds();
 	}
+	public void setSelectedItemIndex(int itemIndex) {
+		selected = itemIndex;
+	}
+	public void setSelectionEnabled(boolean isSelectionEnabled) {
+		this.isSelectionEnabled = isSelectionEnabled;
+	}
 	public void setItemHeight(int item_height) {
 		this.item_h = item_height;
+	}
+	public int getSelectedItemIndex() {
+		return selected;
+	}
+	public boolean isSelectionEnabled() {
+		return isSelectionEnabled;
 	}
 	public ArrayList<JComponent> getItemList(){
 		return list;
 	}
 	public JComponent getItem(int n) {
 		return list.get(n);
+	}
+	public JComponent getSelectedItem() {
+		return list.get(getSelectedItemIndex());
 	}
 	public int getItemHeight() {
 		return item_h;
@@ -166,17 +191,13 @@ public abstract class ListPanel extends Panel{
 			removeItemAt(0);
 		}
 	}
-	public void onHighLightBackground(Graphics2D g2d, int x, int y, int w, int h) {
-		if(hovered != -1) {
-			g2d.setColor(getHighlightBackground());
-			g2d.fillRect( x, y, w, h);
-		}
+	public void onHighLightBackground(Graphics2D g2d, int x, int y, int w, int h, int selected, float y_translate) {
+		g2d.setColor(getHighlightBackground());
+		g2d.fillRect( x, y + (int)((h * selected) - y_translate), w, h);
 	}
-	public void onHighLightForeground(Graphics2D g2d, int x, int y, int w, int h) {
-		if(hovered != -1) {
-			g2d.setColor(getHighlightForeground());
-			g2d.drawRect( x, y, w, h);
-		}
+	public void onHighLightForeground(Graphics2D g2d, int x, int y, int w, int h, int hovered, float y_translate) {
+		g2d.setColor(getHighlightForeground());
+		g2d.drawRect( x, y + (int)((h * hovered) - y_translate), w, h);
 	}
 	public void onPointItem(int n) {}
 	
@@ -201,6 +222,7 @@ public abstract class ListPanel extends Panel{
 			final int n=list.indexOf(component);
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				setSelectedItemIndex(n);
 				onSelectItem(n);
 				repaint();
 			}

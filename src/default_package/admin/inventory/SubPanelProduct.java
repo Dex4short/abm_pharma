@@ -430,7 +430,7 @@ public abstract class SubPanelProduct extends ActionPanel implements TableConsta
 		}
 	}
 
-	private class UnitPriceField extends DecimalField{
+	private class UnitPriceField extends DecimalField implements Accountancy{
 		private static final long serialVersionUID = -43436803068709785L;
 		private Decimal unitPrice, unitAmount;
 		private Percentage unitDiscount;
@@ -443,7 +443,7 @@ public abstract class SubPanelProduct extends ActionPanel implements TableConsta
 					try {
 						unitPrice    = (Decimal)getValue();
 						unitDiscount = (Percentage)getField(discount).getValue();
-						unitAmount   = Accountancy.calculateUnitAmount(unitPrice, unitDiscount);
+						unitAmount   = calculateUnitAmount(unitPrice, unitDiscount);
 						
 						getField(unit_amount).setValue(unitAmount);
 					} catch (Exception ex) {
@@ -454,7 +454,7 @@ public abstract class SubPanelProduct extends ActionPanel implements TableConsta
 		}
 	}
 
-	private class DiscountField extends PercentageField{
+	private class DiscountField extends PercentageField implements Accountancy{
 		private static final long serialVersionUID = -4439526515605889163L;
 		private Decimal unitPrice, unitAmount;
 		private Percentage unitDiscount;
@@ -466,7 +466,7 @@ public abstract class SubPanelProduct extends ActionPanel implements TableConsta
 					try {
 						unitPrice    = (Decimal)getField(unit_price).getValue();
 						unitDiscount = (Percentage)getValue();
-						unitAmount   = Accountancy.calculateUnitAmount(unitPrice, unitDiscount);
+						unitAmount   = calculateUnitAmount(unitPrice, unitDiscount);
 						
 						getField(unit_amount).setValue(unitAmount);
 					} catch (Exception ex) {

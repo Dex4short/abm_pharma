@@ -15,7 +15,7 @@ public abstract class ReserveProductButton extends Button implements UICustoms, 
 	private static final long serialVersionUID = -4074774662182951765L;
 	public ReserveProductButton() {
 		super(ReserveIcon);
-		custom_button_appearance(this);
+		custom_button_appearance1(this);
 		setEnabled(false);
 	}
 	@Override

@@ -11,7 +11,7 @@ public abstract class AddProductButton  extends IconedButton implements UICustom
 	private static final long serialVersionUID = -4074774662182951765L;
 	public AddProductButton() {
 		super(AddIcon, "Add Product");
-		custom_button_appearance(this);
+		custom_button_appearance1(this);
 	}
 	@Override
 	public void onAction() {

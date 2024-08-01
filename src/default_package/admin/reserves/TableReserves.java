@@ -45,11 +45,4 @@ public abstract class TableReserves extends TableProducts{
 		setSelectedProductsReservation(null, ItemCondition.STORED);
 		displayReservedProducts();
 	}
-	
-	public abstract class RemarksArea extends DescriptionArea{
-		private static final long serialVersionUID = 9125557805889421032L;
-		public RemarksArea(Remarks remarks) {
-			super(remarks.getDetails());
-		}
-	}
 }

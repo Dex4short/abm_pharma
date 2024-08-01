@@ -3,8 +3,8 @@ package misc.objects;
 public class Product {
 	private int inv_id;
 	private Item item;
-	private Pricing pricing;
 	private Packaging packaging;
+	private Pricing pricing;
 	private Remarks remarks;
 	
 	public Product(int inv_id, Item item, Packaging packaging, Pricing pricing, Remarks remarks) {
@@ -13,6 +13,24 @@ public class Product {
 		setPackaging(packaging);
 		setPricing(pricing);
 		setRemarks(remarks);
+	}
+	@Override
+	public String toString() {
+		String str = 
+			"Product( inv_id:" + getInvId() + " )\n" +
+			"\t" + getItem().toString() + "\n" +
+			"\t" + getPackaging().toString() + "\n" +
+			"\t" + getPricing().toString() + "\n"
+		;
+		
+		if(getRemarks() != null) {
+			str += "\t" + getRemarks().toString() + "\n";
+		}else {
+			str += "\tRemarks( n/a )\n" +
+			"\tno remarks \n";
+		}
+		
+		return str;
 	}
 	public void setInvId(int inv_id) {
 		this.inv_id = inv_id;

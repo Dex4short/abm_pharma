@@ -3,9 +3,14 @@ package misc.objects;
 public class Quantity {
 	private int quantity, size;
 	
-	public Quantity(int quantity, int overall) {
+	public Quantity(int quantity, int size) {
 		setQuantity(quantity);
-		setSize(overall);
+		setSize(size);
+	}
+	@Override
+	public String toString() {
+		String str = getQuantity() + "/" + getSize();
+		return str;
 	}
 	public int getQuantity() {
 		return quantity;

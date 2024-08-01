@@ -8,12 +8,26 @@ public class Item {
 	public Item(int inv_id, String item_no, String description, String lot_no, Date date_added, Date exp_date, String brand) {
 		setItemId(inv_id);
 		setItemNo(item_no);
-		setItemNo(item_no);
 		setDescription(description);
 		setLotNo(lot_no);
 		setDateAdded(date_added);
 		setExpDate(exp_date);
 		setBrand(brand);
+	}
+	@Override
+	public String toString() {
+		String str = 
+			"Item( item_id:" + getItemId() + " )\n" +
+			"\t" + getItemId() + "\n" +
+			"\t" + getItemNo() + "\n" +
+			"\t" + getItemNo() + "\n" +
+			"\t" + getDescription() + "\n" +
+			"\t" + getLotNo() + "\n" +
+			"\t" + getDateAdded().toString() + "\n" +
+			"\t" + getExpDate().toString() + "\n" +
+			"\t" + getBrand() + "\n"
+		;	
+		return str;
 	}
 	public int getItemId() {
 		return item_id;

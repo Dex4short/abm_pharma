@@ -1,6 +1,8 @@
 package default_package.admin.inventory;
 
 import java.awt.Color;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -148,6 +150,7 @@ public abstract class SubPanelUOM extends ActionPanel implements UomPresets{
 		private static final long serialVersionUID = 8252498005827473422L;
 		{
 			addItem("none");
+			setSelectionEnabled(false);
 		}
 		@Override
 		public void onSelectItem(int n) {
@@ -187,8 +190,15 @@ public abstract class SubPanelUOM extends ActionPanel implements UomPresets{
 				}
 				else {
 					NumericField num_field = new NumericField("10");
+					num_field.addKeyListener(new KeyAdapter() {
+						@Override
+						public void keyReleased(KeyEvent e) {
+							subUom.setUnitSize(num_field.getNumber());
+						}
+					});
 					num_field.setArc(5);
 					num_field.setCharacterLimit(4);
+					subUom.setUnitSize(10);
 					unitSize_field = num_field;
 				}
 				

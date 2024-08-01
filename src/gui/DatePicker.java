@@ -247,11 +247,17 @@ public abstract class DatePicker extends ActionPanel{
 			}
 		}
 		@Override
-		public void onSelectItem(int n) {}//unused
+		public void onSelectItem(int n) {
+			//TODO
+		}
 		@Override
-		public void onHighLightBackground(Graphics2D g2d, int x, int y, int w, int h) {}
+		public void onHighLightBackground(Graphics2D g2d, int x, int y, int w, int h, int selected, float y_translate) {
+			//disable highlight properties
+		}
 		@Override
-		public void onHighLightForeground(Graphics2D g2d, int x, int y, int w, int h) {}
+		public void onHighLightForeground(Graphics2D g2d, int x, int y, int w, int h, int hovered, float y_translate) {
+			//disable highlight properties
+		}
 		public abstract void onPickYear(String year, int yyyy);
 	}
 	

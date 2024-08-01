@@ -79,7 +79,7 @@ public class PanelInventory extends Panel implements Icons, UICustoms{
 		private static final long serialVersionUID = -4074774662182951765L;
 		public PrintButton() {
 			super(PrinterIcon);
-			custom_button_appearance(this);
+			custom_button_appearance1(this);
 		}
 		@Override
 		public void onAction() {

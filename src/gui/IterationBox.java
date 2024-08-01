@@ -5,11 +5,12 @@ import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
 import misc.interfaces.Theme;
 
-public abstract class IterationBox extends Panel{
+public abstract class IterationBox extends Panel implements Theme{
 	private static final long serialVersionUID = 1L;
 	private JLabel lbl;
 	private Button btn_inc, btn_dec;
@@ -23,6 +24,8 @@ public abstract class IterationBox extends Panel{
 		setArc(5);
 		
 		lbl = new JLabel();
+		lbl.setBorder(BorderFactory.createEmptyBorder(0, 2, 0 ,0));
+		lbl.setFont(h1);
 		lbl.setOpaque(false);
 		add(lbl);
 		

@@ -22,4 +22,17 @@ public class NumericField extends StrictTextField{
 		includeNumbers(true);
 		includeLetters(false);
 	}
+	public int getNumber() {
+		String str = getTextField().getText();
+		int 
+		start = getPreText().length(),
+		end = str.length();
+		
+		str = str.substring(start, end);
+		
+		return Integer.parseInt(str);
+	}
+	public void setNumber(int n) {
+		getTextField().setText(getPreText() + n);
+	}
 }

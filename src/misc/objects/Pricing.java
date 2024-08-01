@@ -12,6 +12,17 @@ public class Pricing {
 		setDiscount(discount);
 		setUnitAmount(unit_amount);
 	}
+	@Override
+	public String toString() {
+		String str = 
+			"Pricing( price_id:" + getPriceId() + " )\n" +
+			"\t" + getCost().toString() + "\n" +
+			"\t" + getUnitPrice().toString() + "\n" +
+			"\t" + getDiscount().toString() + "\n" +
+			"\t" + getUnitAmount().toString() + "\n"
+		;	
+		return str;
+	}
 	public int getPriceId() {
 		return price_id;
 	}

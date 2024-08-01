@@ -68,7 +68,7 @@ public class PanelAdmin extends Panel{
 		g2d.drawImage(img, 10, 10, this);
 		
 		g2d.setColor(Theme.gray_shade[0]);
-		g2d.fillRect(0, 50, getWidth(), getHeight()-60);
+		g2d.fillRoundRect(0, 50, getWidth(), getHeight()-50, 10, 10);
 		
 		super.paint(g2d);
 	}

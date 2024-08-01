@@ -51,7 +51,6 @@ public class PanelDisposal extends Panel implements Icons, UICustoms{
 				btn[delete_btn].setEnabled(enable);
 			}
 		};
-		table.displayDisposedProducts();
 		add(table);
 	}
 	@Override
@@ -95,7 +94,7 @@ public class PanelDisposal extends Panel implements Icons, UICustoms{
 		private static final long serialVersionUID = -5869347417422217739L;
 		public DeleteButton() {
 			super(DeleteIcon);
-			custom_button_appearance(this);
+			custom_button_appearance1(this);
 			setEnabled(false);
 		}
 		@Override

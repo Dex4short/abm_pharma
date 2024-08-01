@@ -93,7 +93,6 @@ public abstract class Button extends Panel implements Theme{
 			g2d.setColor(getBorderColor());
 		}
 		g2d.drawRoundRect( 0, 0, getWidth()-1, getHeight()-1, getArc(), getArc());
-
 	}
 	public void setEnabled(boolean enable) {
 		super.setEnabled(enable);

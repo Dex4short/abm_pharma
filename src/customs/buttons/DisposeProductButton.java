@@ -10,7 +10,7 @@ public abstract class DisposeProductButton  extends Button implements UICustoms,
 	private static final long serialVersionUID = -4074774662182951765L;
 	public DisposeProductButton() {
 		super(DeleteIcon);
-		custom_button_appearance(this);
+		custom_button_appearance1(this);
 		setEnabled(false);
 	}
 	@Override

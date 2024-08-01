@@ -1,30 +1,27 @@
 package default_package.admin.transactions;
 
-import java.awt.Graphics;
-
-import javax.swing.JLabel;
-
+import customs.SummationBar;
 import default_package.admin.inventory.TableInventory;
 import gui.Button;
 import gui.IconedButton;
 import gui.Panel;
 import gui.SearchBar;
-import gui.TextField;
 import misc.interfaces.Icons;
 import misc.interfaces.UICustoms;
+import misc.objects.Decimal;
 
 public class PanelTransactions extends Panel implements Icons, UICustoms{
 	private static final long serialVersionUID = 1413466941505596054L;
-	private Button print_customers_btn, print_purchases_btn, return_product_btn;
 	private SearchBar search_bar1, search_bar2;
-	private TableCustomerTransactions table1;
-	private TableInventory table2;
+	private Button print_customers_btn, print_purchases_btn, return_product_btn;
+	private TableCustomersTransaction table1;
+	private TableCustomersPurchase table2;
 	private SummationBar summation_bar1, summation_bar2;
 
 	public PanelTransactions() {
 		setBackground(doc_color[0]);
 		
-		table1 = new TableCustomerTransactions() {
+		table1 = new TableCustomersTransaction() {
 			private static final long serialVersionUID = -8294324208972422399L;
 			@Override
 			public void onSelectTable(int[] n) {
@@ -33,7 +30,7 @@ public class PanelTransactions extends Panel implements Icons, UICustoms{
 		};
 		add(table1);
 		
-		table2 = new TableInventory() {
+		table2 = new TableCustomersPurchase() {
 			private static final long serialVersionUID = 8529903027125842061L;
 			@Override
 			public void onSelectTable(int[] n) {
@@ -65,16 +62,15 @@ public class PanelTransactions extends Panel implements Icons, UICustoms{
 		add(search_bar2);
 		
 		print_customers_btn = createPrintCustomersButton();
-		print_purchases_btn = createPrintPurchasesButton();
-		return_product_btn  = createReturnProductButton();
-		
 		add(print_customers_btn);
+		print_purchases_btn = createPrintPurchasesButton();
 		add(print_purchases_btn);
+		return_product_btn  = createReturnProductButton();
 		add(return_product_btn);
-
-		summation_bar1 = new SummationBar(0, 0);
-		summation_bar2 = new SummationBar(0, 0);
+		
+		summation_bar1 = new SummationBarTransactions(new Decimal(), new Decimal());
 		add(summation_bar1);
+		summation_bar2 = new SummationBarPurchases(new Decimal(), new Decimal());
 		add(summation_bar2);
 	}
 	@Override
@@ -96,7 +92,7 @@ public class PanelTransactions extends Panel implements Icons, UICustoms{
 		return new Button(PrinterIcon) {
 			private static final long serialVersionUID = 7746895474156705643L;
 			{
-				custom_button_appearance(this);
+				custom_button_appearance1(this);
 				setSize(30, 30);
 			}
 			@Override
@@ -109,7 +105,7 @@ public class PanelTransactions extends Panel implements Icons, UICustoms{
 		return new Button(PrinterIcon) {
 			private static final long serialVersionUID = 7746895474156705643L;
 			{
-				custom_button_appearance(this);
+				custom_button_appearance1(this);
 				setSize(30, 30);
 			}
 			@Override
@@ -122,7 +118,7 @@ public class PanelTransactions extends Panel implements Icons, UICustoms{
 		return new IconedButton(ReturnIcon, "Return Product") {
 			private static final long serialVersionUID = 7746895474156705643L;
 			{
-				custom_button_appearance(this);
+				custom_button_appearance1(this);
 				setSize(130, 30);
 			}
 			@Override
@@ -132,54 +128,21 @@ public class PanelTransactions extends Panel implements Icons, UICustoms{
 		};
 	}
 	
-	private class SummationBar extends Panel{
+	private class SummationBarTransactions extends SummationBar{
 		private static final long serialVersionUID = -7505975260318730558L;
-		private static final int gap=20;
-		private TextField totalProfit_field, totalCostField;
-		private JLabel label1, label2;
 		
-		public SummationBar(int totalCost, int totalProfit) {
-			setBackground(main_color[2]);
-			setArc(5);
-
-			totalProfit_field = new TextField(totalCost + "");
-			totalProfit_field.setArc(20);
-			totalProfit_field.setSize(150, 20);
-			add(totalProfit_field);
-			
-			label1 = new JLabel("Total Profit");
-			label1.setHorizontalAlignment(JLabel.RIGHT);
-			label1.setSize(100, 20);
-			label1.setFont(h2);
-			label1.setForeground(doc_color[0]);
-			add(label1);
-			
-			totalCostField = new TextField(totalProfit + "");
-			totalCostField.setArc(20);
-			totalCostField.setSize(150, 20);
-			add(totalCostField);
-			
-			label2 = new JLabel("Total Cost");
-			label2.setHorizontalAlignment(JLabel.RIGHT);
-			label2.setSize(100, 20);
-			label2.setFont(h2);
-			label2.setForeground(doc_color[0]);
-			add(label2);
+		public SummationBarTransactions(Decimal dec1, Decimal dec2) {
+			super("Total Cost Amount", dec1, "Total Profit", dec2);
+			// TODO Auto-generated constructor stub
 		}
-		@Override
-		public void setBounds(int x, int y, int width, int height) {
-			super.setBounds(x, y, width, height);
-			totalProfit_field.setLocation(width - gap - totalProfit_field.getWidth(), 5);
-			label1.setLocation(totalProfit_field.getX() - gap - label1.getWidth(), 5);
-			totalCostField.setLocation(label1.getX() - gap - totalCostField.getWidth(), 5);
-			label2.setLocation(totalCostField.getX() - gap - label2.getWidth(), 5);
-		}
-		@Override
-		public void paint(Graphics g) {
-			g.setColor(getBackground());
-			g.fillRoundRect(0, 0, getWidth(), getHeight(), getArc(), getArc());
-			
-			super.paint(g);
+	}
+	
+	private class SummationBarPurchases extends SummationBar{
+		private static final long serialVersionUID = -7505975260318730558L;
+		
+		public SummationBarPurchases(Decimal dec1, Decimal dec2) {
+			super("Cost Amount", dec1, "Profit", dec2);
+			// TODO Auto-generated constructor stub
 		}
 	}
 }

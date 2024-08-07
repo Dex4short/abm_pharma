@@ -27,6 +27,10 @@ public class PanelTransactions extends Panel implements Icons, UICustoms{
 			public void onSelectTable(int[] n) {
 				// TODO Auto-generated method stub
 			}
+			@Override
+			public void onPointTable(int n) {
+				// TODO Auto-generated method stub
+			}
 		};
 		add(table1);
 		
@@ -34,6 +38,10 @@ public class PanelTransactions extends Panel implements Icons, UICustoms{
 			private static final long serialVersionUID = 8529903027125842061L;
 			@Override
 			public void onSelectTable(int[] n) {
+				// TODO Auto-generated method stub
+			}
+			@Override
+			public void onPointTable(int n) {
 				// TODO Auto-generated method stub
 			}
 		};

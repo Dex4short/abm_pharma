@@ -11,7 +11,7 @@ public abstract class TableDisposals extends TableProducts{
 		displayDisposedProducts();
 	}
 	public void displayDisposedProducts(){
-		displayProducst(ItemCondition.DISPOSED);
+		displayProducts(ItemCondition.DISPOSED);
 	}
 	public void restoreSelectedDisposedProducts() {
 		setSelectedProductsItemConditionTo(ItemCondition.STORED);

@@ -2,6 +2,7 @@ package customs.buttons;
 
 import default_package.ABM_Pharma;
 import default_package.admin.inventory.SubPanelProduct;
+import default_package.admin.inventory.SubPanelProduct.FillupPanel.QtyField;
 import gui.IconedButton;
 import misc.interfaces.Icons;
 import misc.interfaces.UICustoms;
@@ -22,13 +23,16 @@ public abstract class AddProductButton  extends IconedButton implements UICustom
 		private static final long serialVersionUID = 5028819089367136642L;
 		public SubPanelAddProduct() {
 			super("Add New Product");
-			((QtyField)getField(qty)).maintainAspectRatio(1);
+			
+			for(int i=0; i<3;i++) {
+				((QtyField)getFillupPanel(i).getField(qty)).maintainAspectRatio(1);
+			}
 		}
 		@Override
-		public void onProductOk(Product product) {
+		public void onProductOk(Product product[]) {
 			onAddProduct(product);
 			ABM_Pharma.getWindow().getStacksPanel().popPanel();
-			ABM_Pharma.getWindow().getDisplayPanel().floatMessage("new " + product.getItem().getDescription() + " " + product.getItem().getBrand() + " added.");
+			ABM_Pharma.getWindow().getDisplayPanel().floatMessage("new " + product[0].getItem().getDescription() + " " + product[0].getItem().getBrand() + " added.");
 		}
 		@Override
 		public void onProductCancel() {
@@ -36,5 +40,5 @@ public abstract class AddProductButton  extends IconedButton implements UICustom
 		}
 	}
 	
-	public abstract void onAddProduct(Product product);
+	public abstract void onAddProduct(Product product[]);
 }

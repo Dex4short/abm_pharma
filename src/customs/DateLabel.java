@@ -82,7 +82,6 @@ public abstract class DateLabel extends IconedButton{
 				setStatus(Status.Expired);
 			}
 		}
-		onCheckDate(status);
 	}
 	public void setDate(Date date) {
 		getLabel().setText(date.toString());
@@ -97,6 +96,4 @@ public abstract class DateLabel extends IconedButton{
 		LocalDate date_exp = LocalDate.of(expiry.getYear(), expiry.getMonth(), expiry.getDay());
 		return date_add.compareTo(date_exp.minusMonths(month_margin)) <= 0;
 	}
-	
-	public abstract void onCheckDate(Status status);
 }

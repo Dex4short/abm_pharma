@@ -11,7 +11,9 @@ public class MySQL_Inventory{
 	public static final String InventoryColumns[] = {"inv_id", "item_id", "pack_id", "price_id", "rem_id", "item_condition"};
 	
 	public static void insertProduct(Product product, ItemCondition itemCondition) {
-		MySQL_Items.insertItem(product.getItem());
+		if(itemCondition == ItemCondition.STORED) {
+			MySQL_Items.insertItem(product.getItem());
+		}
 		MySQL_Packaging.insertPackaging(product.getPackaging());
 		MySQL_Pricing.insertPricing(product.getPricing());
 		
@@ -67,6 +69,22 @@ public class MySQL_Inventory{
 	}
 	public static Product selectProduct(int inv_id) {
 		return selectProducts("where inv_id=" + inv_id)[0];
+	}
+	public static Product[] selectProductChildren(Product productParent) {
+		int parentPack_id = productParent.getPackaging().getPackId();
+		
+		Packaging packagings[] = MySQL_Packaging.selectPackagingChildren(parentPack_id);
+		
+		String condtion = "where ";
+		for(int i=0; i<packagings.length; i++){
+			condtion += "pack_id=" + packagings[i].getPackId();
+			
+			if(i != packagings.length-1) {
+				condtion += " or ";
+			}
+		}
+		
+		return selectProducts(condtion);
 	}
 	public static Product[] selectAllProducts(ItemCondition itemCondition) {
 		return selectProducts("where item_condition='" + itemCondition.toString() + "' ");

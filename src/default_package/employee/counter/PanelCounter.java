@@ -40,6 +40,10 @@ public class PanelCounter extends Panel implements Theme, UICustoms{
 			public void onSelectTable(int[] n) {
 				// TODO Auto-generated method stub
 			}
+			@Override
+			public void onPointTable(int n) {
+				// TODO Auto-generated method stub
+			}
 		};
 		table1.displayInventoryProducts();
 		add(table1);		
@@ -48,6 +52,10 @@ public class PanelCounter extends Panel implements Theme, UICustoms{
 			private static final long serialVersionUID = 8529903027125842061L;
 			@Override
 			public void onSelectTable(int[] n) {
+				// TODO Auto-generated method stub
+			}
+			@Override
+			public void onPointTable(int n) {
 				// TODO Auto-generated method stub
 			}
 		};

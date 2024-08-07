@@ -14,7 +14,9 @@ public interface Icons {
 	CheckIcon = getIcon("res/check.png"),
 	InventoryIcon = getIcon("res/inventory.png"),
 	ReserveIcon = getIcon("res/reserve.png"),
-	ReturnIcon = getIcon("res/return.png");
+	ReturnIcon = getIcon("res/return.png"),
+	RefreshIcon = getIcon("res/refresh.png"),
+	FunctionIcon = getIcon("res/function.png");
 
 	public static ImageIcon getIcon(String path) {
 		return new ImageIcon(Toolkit.getDefaultToolkit().getImage(path)); 

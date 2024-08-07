@@ -29,19 +29,16 @@ public abstract class TableCounterInventory extends TableInventory implements UI
 	}
 	@Override
 	public void addRowAt(Row row, int n) {
-		TableProductRow product_row = ((TableProductRow)row);
-		row.addCell(new AddToCartButton(product_row.getProduct()));
+		row.addCell(new AddToCartButton());
 		super.addRowAt(row, n);
 	}
 	
 	private class AddToCartButton extends Button{
 		private static final long serialVersionUID = 5389348761948869122L;
-		private Product product;
 
-		public AddToCartButton(Product product) {
+		public AddToCartButton() {
 			super("+ Add to Cart");
 			setArc(20);
-			setProduct(product);
 		}
 		@Override
 		public void setBounds(int x, int y, int width, int height) {
@@ -49,13 +46,8 @@ public abstract class TableCounterInventory extends TableInventory implements UI
 		}
 		@Override
 		public void onAction() {
-			ABM_Pharma.getWindow().getStacksPanel().pushPanel(new AddToCartSubPanelQty(getProduct()), shadow);
-		}
-		public Product getProduct() {
-			return product;
-		}
-		public void setProduct(Product product) {
-			this.product = product;
+			Product product = ((TableProductRow)getParent()).getProduct();
+			ABM_Pharma.getWindow().getStacksPanel().pushPanel(new AddToCartSubPanelQty(product), shadow);
 		}
 		
 		private class AddToCartSubPanelQty extends SubPanelQty{

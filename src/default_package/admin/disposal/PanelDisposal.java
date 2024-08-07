@@ -50,6 +50,10 @@ public class PanelDisposal extends Panel implements Icons, UICustoms{
 				btn[reserve_btn].setEnabled(enable);
 				btn[delete_btn].setEnabled(enable);
 			}
+			@Override
+			public void onPointTable(int n) {
+				// TODO Auto-generated method stub
+			}
 		};
 		add(table);
 	}

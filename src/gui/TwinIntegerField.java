@@ -41,6 +41,10 @@ public class TwinIntegerField extends Panel{
 		field1.setBounds(0, 0, (getWidth()/2) - 5, getHeight() - 3);
 		field2.setBounds((getWidth()/2) + 5, 0, (getWidth()/2) - 5, getHeight() - 3);
 	}
+	public void setEditable(boolean editable) {
+		field1.getTextField().setEditable(false);
+		field2.getTextField().setEditable(false);
+	}
 	public void setDivider(char divider) {
 		this.divider = divider;
 	}

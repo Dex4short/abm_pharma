@@ -2,7 +2,6 @@ package customs.buttons;
 
 import default_package.ABM_Pharma;
 import default_package.admin.inventory.SubPanelProduct;
-import default_package.admin.inventory.TableInventory;
 import gui.Button;
 import misc.interfaces.Icons;
 import misc.interfaces.UICustoms;
@@ -18,27 +17,35 @@ public abstract class EditProductButton  extends Button implements UICustoms,Ico
 	}
 	@Override
 	public void onAction() {
-		Product product = getTableInventory().getSelectedProducts()[0];
-		ABM_Pharma.getWindow().getStacksPanel().pushPanel(new SubPanelEditProduct(product), shadow);
+		Product products[] = getSelectedProduct();
+		ABM_Pharma.getWindow().getStacksPanel().pushPanel(new SubPanelEditProduct(products), shadow);
 	}
 	
 	private class SubPanelEditProduct extends SubPanelProduct{
 		private static final long serialVersionUID = -2025602627570912043L;
-		public SubPanelEditProduct(Product product) {
+		public SubPanelEditProduct(Product product[]) {
 			super("Edit Product");
-			displayProduct(product);
+			
+			new Thread() {
+				public void run() {
+					for(int i=0; i<product.length; i++) {
+						getFillupPanel(i).displayProduct(product[i]);
+					}
+					showFillupPanel(product.length);
+				};
+			}.start();
 		}
 		@Override
-		public void onProductOk(Product product) {
+		public void onProductOk(Product product[]) {
 			onEditProduct(product);
 			ABM_Pharma.getWindow().getStacksPanel().popPanel();
-			ABM_Pharma.getWindow().getDisplayPanel().floatMessage(product.getItem().getDescription() + " " + product.getItem().getBrand() + " changed.");
+			ABM_Pharma.getWindow().getDisplayPanel().floatMessage(product[0].getItem().getDescription() + " " + product[0].getItem().getBrand() + " changed.");
 		}
 		@Override
 		public void onProductCancel() {
 			ABM_Pharma.getWindow().getStacksPanel().popPanel();
 		}
 	}
-	public abstract void onEditProduct(Product product);
-	public abstract TableInventory getTableInventory();
+	public abstract void onEditProduct(Product product[]);
+	public abstract Product[] getSelectedProduct();
 }

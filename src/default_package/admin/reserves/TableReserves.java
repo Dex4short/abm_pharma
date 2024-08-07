@@ -35,7 +35,7 @@ public abstract class TableReserves extends TableProducts{
 		super.addRowAt(row, n);
 	}
 	public void displayReservedProducts() {
-		displayProducst(ItemCondition.RESERVED);
+		displayProducts(ItemCondition.RESERVED);
 	}
 	public void disposeSelectedReservedProducts() {
 		setSelectedProductsReservation(null, ItemCondition.DISPOSED);

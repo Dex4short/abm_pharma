@@ -34,8 +34,7 @@ public class TextField extends Panel{
 		setSubText(sub_text);
 	}
 	private final void text_field(String txt) {
-		setLayout(new GridLayout(1,1));
-		setOpaque(false);
+		setLayout(new GridLayout(1, 1));
 		setArc(5);
 		
 		pre_text = "";

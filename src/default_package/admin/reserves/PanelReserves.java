@@ -47,6 +47,10 @@ public class PanelReserves extends Panel implements Icons, UICustoms{
 				btn[inventory_btn].setEnabled(enable);
 				btn[delete_btn].setEnabled(enable);
 			}
+			@Override
+			public void onPointTable(int n) {
+				// TODO Auto-generated method stub
+			}
 		};
 		table.displayReservedProducts();
 		add(table);

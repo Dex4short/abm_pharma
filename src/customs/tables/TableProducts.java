@@ -21,18 +21,22 @@ public abstract class TableProducts extends Table implements TableConstants.Prod
 	public TableProducts() {
 		super(ProductFields);
 	}
-	public void displayProducst(ItemCondition item_condition) {
+	public void displayProducts(ItemCondition item_condition) {
 		removeAllRows();
-
-		Product products[] = MySQL_Inventory.selectAllProducts(item_condition);
-		TableProductRow inv_row;
 		
-		for(Product product: products) {
-			inv_row = createTableProductRow(product);
-			addRow(inv_row);
-		}
+		new Thread() {
+			public void run() {
+				Product products[] = MySQL_Inventory.selectAllProducts(item_condition);
+				TableProductRow inv_row;
+				
+				for(Product product: products) {
+					inv_row = createTableProductRow(product);
+					addRow(inv_row);
+				}
+			}
+		}.start();
 		
-		onSelectTable(new int[] {});//refresh check boxes
+		clearSelections();
 	}
 	public Product[] getSelectedProducts() {
 		int
@@ -50,6 +54,13 @@ public abstract class TableProducts extends Table implements TableConstants.Prod
 		}
 		
 		return products;
+	}
+	public Product getSelectedProduct() {
+		return getSelectedProducts()[0];
+	}
+	public Product[] getSelectedProductChildren() {
+		Product parent_product = getSelectedProduct();
+		return MySQL_Inventory.selectProductChildren(parent_product);
 	}
 	public void setSelectedProductsItemConditionTo(ItemCondition itemCondition) {
 		Product products[] = getSelectedProducts();
@@ -88,10 +99,6 @@ public abstract class TableProducts extends Table implements TableConstants.Prod
 					private static final long serialVersionUID = 28304963119071874L;
 					@Override
 					public void onAction() {
-						// TODO
-					}
-					@Override
-					public void onCheckDate(Status status) {
 						// TODO
 					}
 				};

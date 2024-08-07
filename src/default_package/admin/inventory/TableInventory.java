@@ -13,28 +13,30 @@ public abstract class TableInventory extends TableProducts{
 	public TableInventory() {
 		
 	}
-	public void addInventoryProduct(Product product) {
-		product.setInvId(MySQL.nextUID("inv_id", "inventory"));
-		MySQL_Inventory.insertProduct(product, ItemCondition.STORED);
-
-		TableProductRow 
-		inv_row = createTableProductRow(product);
-		
-		addRow(inv_row);
+	public void addInventoryProduct(Product product[]) {
+		ItemCondition item_condition;
+		for(int i=0; i<product.length; i++) {
+			product[i].setInvId(MySQL.nextUID("inv_id", "inventory"));
+			if(i==0) {
+				item_condition = ItemCondition.STORED;
+			}
+			else {
+				item_condition = ItemCondition.ARCHIVED;
+				product[i].getItem().setItemId(product[0].getItem().getItemId());
+				product[i].getPackaging().setParentPackId(product[0].getPackaging().getPackId());
+			}
+			MySQL_Inventory.insertProduct(product[i], item_condition);
+		}
+		displayInventoryProducts();
 	}
-	public void editInventoryProduct(Product product) {
-		int selected_row = getSelectedRows()[0];
-		
-		MySQL_Inventory.updateProduct(product);
-		
-		TableProductRow 
-		inv_row = createTableProductRow(product);
-
-		removeRowAt(selected_row);
-		addRowAt(inv_row, selected_row);
+	public void editInventoryProduct(Product product[]) {
+		for(int i=0; i<product.length; i++) {
+			MySQL_Inventory.updateProduct(product[i]);
+		}
+		displayInventoryProducts();
 	}
 	public void displayInventoryProducts() {
-		displayProducst(ItemCondition.STORED);
+		displayProducts(ItemCondition.STORED);
 	}
 	public void disposeSelectedInventoryProducts() {
 		setSelectedProductsItemConditionTo(ItemCondition.DISPOSED);

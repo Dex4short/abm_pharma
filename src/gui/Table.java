@@ -195,6 +195,10 @@ public abstract class Table extends Panel{
 		list_panel.removeAllItems();
 		check_count = 0;
 	}
+	public void clearSelections() {
+		setAllCheckBoxesPressed(false);
+		checkSelectedRows();
+	}
 	public void onTableResized(int w, int h) {
 		main_checkBox.setLocation(getMargine() + (getIndent()/2) - (main_checkBox.getWidth()/2), (column_h/2) - (main_checkBox.getHeight()/2));
 		setColumnWidth((w-(getMargine()*3)-getIndent()-list_panel.getVScrollBar().getWidth()) / getColumnCount());
@@ -210,9 +214,6 @@ public abstract class Table extends Panel{
 		checkSelectedRows();
 		onSelectTable(getSelectedRows());
 	}
-	public void onPointTable(int n) {
-		//do nothing
-	}
 	public void onSelectTable(int n) {
 		setAllCheckBoxesPressed(false);
 		CheckBox box = ((Row)list_panel.getItem(n)).getCheckBox();
@@ -220,6 +221,7 @@ public abstract class Table extends Panel{
 		checkSelectedRows();
 		onSelectTable(getSelectedRows());
 	}
+	public abstract void onPointTable(int n);
 	public abstract void onSelectTable(int n[]);
 	
 	public class Column extends JLabel{

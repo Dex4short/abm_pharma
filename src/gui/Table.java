@@ -68,7 +68,6 @@ public abstract class Table extends Panel{
 		setColumnHeight(30);
 		setRowHeight(30);
 		
-		
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
@@ -197,7 +196,7 @@ public abstract class Table extends Panel{
 	}
 	public void clearSelections() {
 		setAllCheckBoxesPressed(false);
-		checkSelectedRows();
+		onSelectTable(-1);
 	}
 	public void onTableResized(int w, int h) {
 		main_checkBox.setLocation(getMargine() + (getIndent()/2) - (main_checkBox.getWidth()/2), (column_h/2) - (main_checkBox.getHeight()/2));
@@ -216,8 +215,11 @@ public abstract class Table extends Panel{
 	}
 	public void onSelectTable(int n) {
 		setAllCheckBoxesPressed(false);
-		CheckBox box = ((Row)list_panel.getItem(n)).getCheckBox();
-		box.setPressed(!box.isPressed());
+		
+		if(n >= 0) {
+			CheckBox box = ((Row)list_panel.getItem(n)).getCheckBox();
+			box.setPressed(!box.isPressed());
+		}
 		checkSelectedRows();
 		onSelectTable(getSelectedRows());
 	}
@@ -355,7 +357,7 @@ public abstract class Table extends Panel{
 			list_panel.setSelectedItemIndex(-1);
 		}
 		else {
-			list_panel.setSelectedItemIndex(checked_rows[check_count-1]);
+			list_panel.setSelectedItemIndex(checked_rows[getCheckCount() - 1]);
 		}
 	}
 }

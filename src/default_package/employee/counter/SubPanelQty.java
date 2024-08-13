@@ -11,7 +11,9 @@ import gui.HorizontalPanel;
 import gui.ListPanel;
 import gui.NumericField;
 import misc.interfaces.UnitConverter;
+import misc.objects.Packaging;
 import misc.objects.Product;
+import misc.objects.Quantity;
 import misc.objects.Uom;
 
 public abstract class SubPanelQty extends ActionPanel implements UnitConverter{
@@ -57,10 +59,7 @@ public abstract class SubPanelQty extends ActionPanel implements UnitConverter{
 			@Override
 			public void onSelectItem(int n) {
 				ItemUom item_uom = (ItemUom)getItem(n);
-				
-				String 
-				unit_name = item_uom.getUom().getUnitType().toString();
-				
+				String unit_name = item_uom.getUom().getUnitType().toString();
 				uom_label.setText(unit_name);
 			}
 		};
@@ -71,26 +70,33 @@ public abstract class SubPanelQty extends ActionPanel implements UnitConverter{
 	}
 	@Override
 	public void onOk() {
-		Product 
-		product = getProduct(),
-		byproducts[];
+		Packaging
+		packaging = product.getPackaging(),
+		repackaging,
+		bypackagings[];
+		
+		int
+		parentPack_id = packaging.getPackId(),
+		qty1 = product.getPackaging().getQty().getQuantity(),
+		qty2 = qty_field.getNumber();
+		
+		Quantity
+		qty = new Quantity(qty2, qty2);
 		
 		Uom
 		uom1 = product.getPackaging().getUom(),
 		uom2 = ((ItemUom)uom_list.getSelectedItem()).getUom();
+
+		repackaging = new Packaging(-1, qty, uom2, parentPack_id);
+		bypackagings = subtractUnits(packaging, uom1, qty1, uom2, qty2);
 		
-		int
-		qty1 = product.getPackaging().getQty().getQuantity(),
-		qty2 = qty_field.getNumber();
-		
-		byproducts = subtractUnits(product, uom1, qty1, uom2, qty2);
-		if(byproducts == null) {
+		if(bypackagings == null) {
 			ABM_Pharma.getWindow().getDisplayPanel().floatMessage("Insuficient unit quantity.");
 			Toolkit.getDefaultToolkit().beep();
 			return;
 		}
 		
-		onProductQtyOk(byproducts);
+		onProductQtyOk(repackaging, bypackagings);
 	}
 	@Override
 	public void onCancel() {
@@ -106,7 +112,6 @@ public abstract class SubPanelQty extends ActionPanel implements UnitConverter{
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x + (width/2) - (panel_w/2), y + (height/2) - (panel_h/2), panel_w, panel_h);
 	}
-	
 	public Product getProduct() {
 		return product;
 	}
@@ -114,6 +119,8 @@ public abstract class SubPanelQty extends ActionPanel implements UnitConverter{
 		this.product = product;
 	}
 
+	public abstract void onProductQtyOk(Packaging repackaging,Packaging bypackagings[]);
+	
 	public class ItemUom extends HorizontalPanel{
 		private static final long serialVersionUID = 285736772407821987L;
 		private JLabel lbl1,lbl2;
@@ -145,8 +152,6 @@ public abstract class SubPanelQty extends ActionPanel implements UnitConverter{
 		}
 	}
 	
-	public abstract void onProductQtyOk(Product byproducts[]);
-	
 	private void createUomListItems() {
 		Uom uom = product.getPackaging().getUom();
 		
@@ -158,7 +163,6 @@ public abstract class SubPanelQty extends ActionPanel implements UnitConverter{
 			uom_list.addItem(new ItemUom(uom, description1 + description2));
 			
 			description1 = "1 " + uom.getUnitType();
-			
 			uom = uom.getSubUom();
 			
 			if(uom != null) {

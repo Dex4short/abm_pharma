@@ -15,7 +15,9 @@ public class MySQL_Inventory{
 			MySQL_Items.insertItem(product.getItem());
 		}
 		MySQL_Packaging.insertPackaging(product.getPackaging());
-		MySQL_Pricing.insertPricing(product.getPricing());
+		if(itemCondition != ItemCondition.ORDERED) {
+			MySQL_Pricing.insertPricing(product.getPricing());
+		}
 		
 		Object values[] = {
 				product.getInvId(),
@@ -26,17 +28,7 @@ public class MySQL_Inventory{
 				itemCondition.toString()
 		};
 		MySQL.insert("inventory", InventoryColumns, values);
-	}
-	public static int[] selectProductIds(int inv_id, ItemCondition itemCondition) {
-		Object inv_result[][] = MySQL.select(InventoryColumns, "inventory", "where inv_id=" + inv_id + " and item_condition='" + itemCondition + "' ");
 		
-		int
-		item_id  = (int)inv_result[0][1],
-		pack_id  = (int)inv_result[0][2],
-		price_id = (int)inv_result[0][3],
-		rem_id   = (int)inv_result[0][4];
-		
-		return new int[] {inv_id, item_id, pack_id, price_id, rem_id};
 	}
 	public static Product[] selectProducts(String condition) {
 		Object inventory_result[][] = MySQL.select(InventoryColumns, "inventory", condition);		
@@ -73,7 +65,7 @@ public class MySQL_Inventory{
 	public static Product[] selectProductChildren(Product productParent) {
 		int parentPack_id = productParent.getPackaging().getPackId();
 		
-		Packaging packagings[] = MySQL_Packaging.selectPackagingChildren(parentPack_id);
+		Packaging packagings[] = MySQL_Packaging.selectPackagingChildrenStoredArchived(parentPack_id);
 		
 		String condtion = "where ";
 		for(int i=0; i<packagings.length; i++){
@@ -89,13 +81,20 @@ public class MySQL_Inventory{
 	public static Product[] selectAllProducts(ItemCondition itemCondition) {
 		return selectProducts("where item_condition='" + itemCondition.toString() + "' ");
 	}
-	public static void updateProduct(Product product) {		
+	public static int selectProductPriceIdByPackId(int pack_id) {
+		Object inv_result[][] = MySQL.select(new String[]{"price_id"}, "inventory", "where pack_id=" + pack_id);
+		return (int)inv_result[0][0];
+	}
+	public static void updateProduct(Product product) {
 		MySQL_Items.updateItem(product.getItem());
 		MySQL_Packaging.updatePackaging(product.getPackaging());
 		MySQL_Pricing.updatePricing(product.getPricing());
 	}
 	public static void updateProductItemCondition(int inv_id, ItemCondition itemCondition) {
 		MySQL.update("inventory", new String[]{"item_condition"}, new Object[] {itemCondition.toString()}, "where inv_id=" + inv_id);
+	}
+	public static void updateProductItemConditionByPackaging(int pack_id, ItemCondition itemCondition) {
+		MySQL.update("inventory", new String[]{"item_condition"}, new Object[] {itemCondition.toString()}, "where inv_id=" + pack_id);
 	}
 	public static void updateProductRemarks(int inv_id, Remarks remarks) {
 		int rem_id;
@@ -108,5 +107,8 @@ public class MySQL_Inventory{
 			rem_id = remarks.getRemId();
 		}
 		MySQL.update("inventory", new String[]{"rem_id"}, new Object[] {rem_id}, "where inv_id=" + inv_id);
+	}
+	public static void deleteFromInventory(int inv_id) {
+		MySQL.delete("inventory", "where inv_id=" + inv_id);
 	}
 }

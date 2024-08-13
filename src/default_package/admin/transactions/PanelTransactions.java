@@ -93,8 +93,8 @@ public class PanelTransactions extends Panel implements Icons, UICustoms{
 		
 		search_bar2.setLocation(0, (getHeight()/2) + 5);
 
-		summation_bar1.setBounds(0, table1.getY() + table1.getHeight(), width - 15, 30);
-		summation_bar2.setBounds(0, table2.getY() + table2.getHeight(), width - 15, 30);
+		summation_bar1.setBounds(0, table1.getY() + table1.getHeight(), width, 30);
+		summation_bar2.setBounds(0, table2.getY() + table2.getHeight(), width, 30);
 	}
 	private final Button createPrintCustomersButton() {
 		return new Button(PrinterIcon) {

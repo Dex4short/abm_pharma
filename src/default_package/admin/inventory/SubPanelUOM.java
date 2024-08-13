@@ -12,6 +12,7 @@ import gui.HorizontalPanel;
 import gui.IterationBox;
 import gui.ListPanel;
 import gui.NumericField;
+import misc.enums.UomType;
 import misc.interfaces.Theme;
 import misc.interfaces.UomPresets;
 import misc.objects.Uom;
@@ -175,7 +176,9 @@ public abstract class SubPanelUOM extends ActionPanel implements UomPresets{
 				unitName_label.setForeground(Theme.doc_color[1]);
 				add(unitName_label);
 				
-				if(size_value >= 0) {
+				UomType uom_type = subUom.getUnitType();
+				
+				if(uom_type==UomType.capsule || uom_type==UomType.tablet) {
 					unitSize_field = new IterationBox(Uom_Sizes, (size_value/2) - 2) {
 						private static final long serialVersionUID = 1L;
 						@Override
@@ -189,7 +192,7 @@ public abstract class SubPanelUOM extends ActionPanel implements UomPresets{
 					};
 				}
 				else {
-					NumericField num_field = new NumericField("10");
+					NumericField num_field = new NumericField(size_value + "");
 					num_field.addKeyListener(new KeyAdapter() {
 						@Override
 						public void keyReleased(KeyEvent e) {
@@ -198,7 +201,6 @@ public abstract class SubPanelUOM extends ActionPanel implements UomPresets{
 					});
 					num_field.setArc(5);
 					num_field.setCharacterLimit(4);
-					subUom.setUnitSize(10);
 					unitSize_field = num_field;
 				}
 				

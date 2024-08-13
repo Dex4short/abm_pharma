@@ -32,7 +32,7 @@ public abstract class AddProductButton  extends IconedButton implements UICustom
 		public void onProductOk(Product product[]) {
 			onAddProduct(product);
 			ABM_Pharma.getWindow().getStacksPanel().popPanel();
-			ABM_Pharma.getWindow().getDisplayPanel().floatMessage("new " + product[0].getItem().getDescription() + " " + product[0].getItem().getBrand() + " added.");
+			ABM_Pharma.getWindow().getDisplayPanel().floatMessage("new " + product[0].getItem().getDescription() + " [" + product[0].getItem().getBrand() + "] added.");
 		}
 		@Override
 		public void onProductCancel() {

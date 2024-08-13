@@ -102,26 +102,35 @@ public abstract class SubPanelProduct extends ActionPanel implements TableConsta
 	}
 	@Override
 	public void onOk() {
-		Product product[] = new Product[showed_fillup_panels];
+		Product products[] = new Product[showed_fillup_panels];
+		
 		int 
 		parent_item_id = -1,
 		parent_pack_id = -1;
 		
+		boolean product_prepared;
+		
 		try {
 			for(int i=0; i<showed_fillup_panels; i++) {
-				fillup_panel[i].prepareProduct(parent_item_id, parent_pack_id);
+				product_prepared = fillup_panel[i].prepareProduct(parent_item_id, parent_pack_id);
 				
-				product[i] = fillup_panel[i].getProduct();
-				
-				parent_item_id = product[0].getItem().getItemId();
-				parent_pack_id = product[0].getPackaging().getPackId();
+				if(product_prepared) {
+					products[i] = fillup_panel[i].getProduct();
+					
+					parent_item_id = products[0].getItem().getItemId();
+					parent_pack_id = products[0].getPackaging().getPackId();
+				}
+				else {
+					return;
+				}
 			}
 		} catch (Exception e) {
 			ABM_Pharma.getWindow().getDisplayPanel().floatMessage("Unexpected Error...(SubPanelProduct -> onOk)");
+			System.out.println(e.getMessage());
 			return;
 		}
 
-		onProductOk(product);
+		onProductOk(products);
 	}
 	@Override
 	public void onCancel() {
@@ -150,7 +159,7 @@ public abstract class SubPanelProduct extends ActionPanel implements TableConsta
 		
 		revalidate();
 	}
-	public abstract void onProductOk(Product product[]);
+	public abstract void onProductOk(Product new_products[]);
 	public abstract void onProductCancel();
 	
 	public class FillupPanel extends HorizontalPanel {
@@ -198,7 +207,9 @@ public abstract class SubPanelProduct extends ActionPanel implements TableConsta
 
 			((DecimalField)field[unit_amount]).getTextField().setEditable(false);
 		}
-		public void prepareProduct(int parent_item_id, int parent_pack_id) {
+		public boolean prepareProduct(int parent_item_id, int parent_pack_id) {
+			boolean prepared;
+			
 			int
 			inv_id = -1,
 			item_id = parent_item_id,
@@ -239,11 +250,15 @@ public abstract class SubPanelProduct extends ActionPanel implements TableConsta
 						),
 						null //no remarks yet
 				));
+				prepared=true;
 			}
 			catch (Exception e) {
 				Toolkit.getDefaultToolkit().beep();
 				ABM_Pharma.getWindow().getDisplayPanel().floatMessage(e.getMessage());
+				prepared=false;
 			}
+			
+			return prepared;
 		}
 		public void setProduct(Product product) {
 			this.product = product;
@@ -635,6 +650,8 @@ public abstract class SubPanelProduct extends ActionPanel implements TableConsta
 
 		if(i != 0) {
 			((QtyField)fillup_panel[i].getField(qty)).setVisible(false);
+			((DateField)fillup_panel[i].getField(date_added)).setVisible(false);
+			((DateField)fillup_panel[i].getField(exp_date)).setVisible(false);
 		}
 	}
 	private void syncronize_text_fields(int i) {
@@ -659,7 +676,11 @@ public abstract class SubPanelProduct extends ActionPanel implements TableConsta
 					}
 				}
 			});
-		}
+
+			if(i!=0) {
+				txt_field[n].setVisible(false);
+			}
+		}		
 	}
 	private void syncronize_date_fields(int field_column, Date date) {
 		((DateField)fillup_panel[0].getField(field_column)).setDate(date);

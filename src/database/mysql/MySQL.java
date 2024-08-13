@@ -89,29 +89,31 @@ public abstract class MySQL {
 
 		final Object result[][] = new Object[result_count][column_count];
 		
-		new MySQL() {
-			private int i,ii;
-			@Override
-			public void onExecute() throws Exception {	
-				String query = "select ";
-				
-				for(i=0; i<column_count-1; i++) {
-					query += columns[i] + ", ";
-				}
-				query += columns[i] + " from " + table + " " + condition + " ;";
-				
-				s = c.createStatement();
-				rs = s.executeQuery(query);
-				
-				i=0;
-				while(rs.next()) {
-					for(ii=0; ii<column_count; ii++) {
-						result[i][ii] = rs.getObject(ii + 1);
+		if(result_count > 0) {
+			new MySQL() {
+				private int i,ii;
+				@Override
+				public void onExecute() throws Exception {	
+					String query = "select ";
+					
+					for(i=0; i<column_count-1; i++) {
+						query += columns[i] + ", ";
 					}
-					i++;
+					query += columns[i] + " from " + table + " " + condition + " ;";
+					
+					s = c.createStatement();
+					rs = s.executeQuery(query);
+					
+					i=0;
+					while(rs.next()) {
+						for(ii=0; ii<column_count; ii++) {
+							result[i][ii] = rs.getObject(ii + 1);
+						}
+						i++;
+					}
 				}
-			}
-		}.execute();
+			}.execute();
+		}
 		
 		return result;
 	}

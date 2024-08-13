@@ -43,4 +43,7 @@ public class MySQL_Pricing {
 		};
 		MySQL.update("pricing", PricingColumns, values, "where price_id=" + pricing.getPriceId());
 	}
+	public static void deletePricing(int price_id) {
+		MySQL.delete("pricing", "where price_id=" + price_id);
+	}
 }

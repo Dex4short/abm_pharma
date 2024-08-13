@@ -108,8 +108,8 @@ public class PanelInventory extends Panel implements Icons, UICustoms{
 		return new EditProductButton() {
 			private static final long serialVersionUID = -886513641879925498L;
 			@Override
-			public void onEditProduct(Product product[]) {
-				table.editInventoryProduct(product);
+			public void onEditProduct(Product new_products[],Product old_products[]) {
+				table.editInventoryProduct(new_products, old_products);
 			}
 			@Override
 			public Product[] getSelectedProduct() {
@@ -149,8 +149,8 @@ public class PanelInventory extends Panel implements Icons, UICustoms{
 		return new AddProductButton() {
 			private static final long serialVersionUID = -4302509354699595386L;
 			@Override
-			public void onAddProduct(Product product[]) {
-				table.addInventoryProduct(product);
+			public void onAddProduct(Product products[]) {
+				table.addInventoryProduct(products);
 			}
 			@Override
 			public void onAction() {

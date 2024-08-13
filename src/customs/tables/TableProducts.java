@@ -33,10 +33,10 @@ public abstract class TableProducts extends Table implements TableConstants.Prod
 					inv_row = createTableProductRow(product);
 					addRow(inv_row);
 				}
+
+				clearSelections();
 			}
 		}.start();
-		
-		clearSelections();
 	}
 	public Product[] getSelectedProducts() {
 		int
@@ -77,7 +77,6 @@ public abstract class TableProducts extends Table implements TableConstants.Prod
 			MySQL_Inventory.updateProductRemarks(inv_id, remarks);
 		}
 	}
-	
 	public JComponent[] createProductRowComponents(Product product) {
 		JComponent
 		item_no		= new JLabel(product.getItem().getItemNo() + ""),
@@ -107,7 +106,7 @@ public abstract class TableProducts extends Table implements TableConstants.Prod
 			}
 		},
 		brand		= new JLabel(product.getItem().getBrand()),
-		qty			= new JLabel(product.getPackaging().getQty().getQuantity() + ""),
+		qty			= new JLabel(product.getPackaging().getQty().getQuantity() + " / " + product.getPackaging().getQty().getSize()),
 		uom			= new JLabel(product.getPackaging().getUom().getUnitType().toString()),
 		cost		= new JLabel(product.getPricing().getCost().toString()),
 		unit_price	= new JLabel(product.getPricing().getUnitPrice().toString()),

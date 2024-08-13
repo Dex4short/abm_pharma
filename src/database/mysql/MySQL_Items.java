@@ -46,4 +46,7 @@ public class MySQL_Items {
 		};
 		MySQL.update("items", ItemsColumns, values, "where item_id=" + item.getItemId());
 	}
+	public static void deleteItem(int item_id) {
+		MySQL.delete("items", "where item_id=" + item_id);
+	}
 }

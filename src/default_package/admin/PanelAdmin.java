@@ -10,9 +10,11 @@ import default_package.admin.disposal.PanelDisposal;
 import default_package.admin.inventory.PanelInventory;
 import default_package.admin.reserves.PanelReserves;
 import default_package.admin.transactions.PanelTransactions;
+import default_package.employee.counter.PanelCounter;
 import gui.Panel;
 import gui.Tabs;
 import misc.interfaces.Theme;
+import misc.objects.Counter;
 
 public class PanelAdmin extends Panel{
 	private static final long serialVersionUID = -6374468091255785095L;
@@ -26,7 +28,7 @@ public class PanelAdmin extends Panel{
 		
 		img = Toolkit.getDefaultToolkit().getImage("res/ABM LOGO 2.png");
 		
-		String labels[] = {"Inventory", "Transactions", "Reserves", "Disposal", "Product Returns", "Statistics", "Customers"};
+		String labels[] = {"Inventory", "Transactions", "Store", "Reserves", "Disposal", "Product Returns", "Statistics", "Customers"};
 		tabs = new Tabs(labels) {
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -37,8 +39,10 @@ public class PanelAdmin extends Panel{
 				case 1:
 					return new PanelTransactions();
 				case 2:
-					return new PanelReserves();
+					return new PanelCounter(new Counter());
 				case 3:
+					return new PanelReserves();
+				case 4:
 					return new PanelDisposal();
 				default:
 					return new Panel();

@@ -16,6 +16,7 @@ import misc.interfaces.Theme;
 
 public abstract class PanelLogin extends Panel{
 	private static final long serialVersionUID = -3149306316190451372L;
+	private static final int panel_w=300, panel_h=400;
 	private Graphics2D g2d;
 	private final Image logo;
 	private final int logoSize;
@@ -60,8 +61,6 @@ public abstract class PanelLogin extends Panel{
 			}
 		};
 		add(cancel_link);
-
-		setSize(300, 400);
 	}
 	@Override
 	public void paint(Graphics g) {
@@ -80,10 +79,10 @@ public abstract class PanelLogin extends Panel{
 	}
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
-		super.setBounds((width/2) - (getWidth()/2), (height/2) - (getHeight()/2), 300, 400);
-		pass.setBounds((getWidth()/2)-80, (int)(getHeight()*0.65) - 13, 160, 25);
-		login_btn.setBounds((getWidth()/2)-50, (int)(getHeight()*0.75) - 13, 100, 25);
-		cancel_link.setBounds((getWidth()/2) - 50, (int)(getHeight()*0.82) - 13, 100, 25);
+		super.setBounds(x + (width/2) - (panel_w/2), y + (height/2) - (panel_h/2), panel_w, panel_h);
+		pass.setBounds((panel_w/2)-80, (int)(panel_h*0.65) - 13, 160, 25);
+		login_btn.setBounds((panel_w/2)-50, (int)(panel_h*0.75) - 13, 100, 25);
+		cancel_link.setBounds((panel_w/2) - 50, (int)(panel_h*0.82) - 13, 100, 25);
 	}
 	private void inputPassword(char password[]) {
 		SecurityRole role = MySQL_Security.getAccess(password);
@@ -91,9 +90,11 @@ public abstract class PanelLogin extends Panel{
 		switch (role) {
 		case ADMIN:
 			pass.setLabel("Please wait...");
+			pass.setEditable(false);
 			break;
 		case EMPLOYEE:
 			pass.setLabel("Please wait...");
+			pass.setEditable(false);
 			break;
 		case NONE:
 			pass.setLabel("Wrong Password");

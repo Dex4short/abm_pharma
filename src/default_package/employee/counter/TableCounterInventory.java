@@ -1,9 +1,15 @@
 package default_package.employee.counter;
 
+import database.mysql.MySQL_Inventory;
+import database.mysql.MySQL_Packaging;
+import database.mysql.MySQL_Pricing;
 import default_package.ABM_Pharma;
 import default_package.admin.inventory.TableInventory;
 import gui.Button;
+import misc.enums.UomType;
 import misc.interfaces.UICustoms;
+import misc.objects.Packaging;
+import misc.objects.Pricing;
 import misc.objects.Product;
 
 public abstract class TableCounterInventory extends TableInventory implements UICustoms{
@@ -32,6 +38,7 @@ public abstract class TableCounterInventory extends TableInventory implements UI
 		row.addCell(new AddToCartButton());
 		super.addRowAt(row, n);
 	}
+	public abstract void onAddToCart(Product product);
 	
 	private class AddToCartButton extends Button{
 		private static final long serialVersionUID = 5389348761948869122L;
@@ -57,11 +64,34 @@ public abstract class TableCounterInventory extends TableInventory implements UI
 				super(product);
 			}
 			@Override
-			public void onProductQtyOk(Product[] byproducts) {
-				for(Product product: byproducts) {
-					System.out.println(product.toString() + "\n");
+			public void onProductQtyOk(Packaging newPackaging,Packaging bypackagings[]) {
+				MySQL_Packaging.updateByPackagingQuantities(bypackagings);
+				
+				Product product = getProduct();
+				product.setPackaging(newPackaging);
+				
+				UomType
+				type1 = newPackaging.getUom().getUnitType(),
+				type2;
+				
+				int price_id = -1;
+				
+				for(Packaging pack: bypackagings) {
+					type2 = pack.getUom().getUnitType();
+					
+					if(type1 == type2) {
+						System.out.println(">>" + pack.getPackId());
+						price_id = MySQL_Inventory.selectProductPriceIdByPackId(pack.getPackId());
+					}
 				}
-				//TODO
+				
+				Pricing newPricing = MySQL_Pricing.selectPricing(price_id);
+				product.setPricing(newPricing);
+				
+				onAddToCart(product);
+				
+				ABM_Pharma.getWindow().getStacksPanel().popPanel();
+				displayInventoryProducts();
 			}
 		}
 	}

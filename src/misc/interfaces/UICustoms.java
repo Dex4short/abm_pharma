@@ -20,4 +20,12 @@ public interface UICustoms extends Theme{
 		btn.setPressedColor(doc_color[0].darker());
 		btn.setArc(30);
 	}
+	public default void custom_button_appearance3(Button btn){
+		btn.setBackground(gray_shade[0]);
+		btn.setForeground(doc_color[1]);
+		btn.getLabel().setForeground(doc_color[1]);
+		btn.setHighlight(gray_shade[1]);
+		btn.setPressedColor(gray_shade[1].darker());
+		btn.setArc(30);
+	}
 }

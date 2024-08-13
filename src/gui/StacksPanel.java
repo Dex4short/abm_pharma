@@ -50,11 +50,13 @@ public abstract class StacksPanel extends Panel{
 		repaint();
 	}
 	public final void popPanel() {
-		onPopPanel((Panel)getComponent(0));
-		remove(0);
-		
-		revalidate();
-		repaint();
+		if(getComponentCount() > 0) {
+			onPopPanel((Panel)getComponent(0));
+			remove(0);
+			
+			revalidate();
+			repaint();
+		}
 	}
 	public Color getLayerColor() {
 		return layer_color;

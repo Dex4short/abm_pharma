@@ -1,0 +1,121 @@
+create database abm_pharma;
+
+use abm_pharma;
+
+create table security(sec_id int, password varchar(16), role varchar(3));
+insert into security values(0, 'admin', 'adm');
+insert into security values(1, 'employee', 'emp');
+
+create table inventory(inv_id int, item_id int, pack_id int, price_id int, rem_id int, item_condition varchar(9));
+
+create table items(item_id int, item_no varchar(8), description varchar(64), lot_no varchar(8), date_added date, exp_date date, brand varchar(32));
+
+create table packaging(pack_id int, qty int, size int, uom_id int, parentPack_id int);
+
+create table uom(uom_id int, name varchar(16), size int, subUom_id int);
+
+create table pricing(price_id int, cost decimal(12,2), unit_price decimal(12,2), discount varchar(4), unit_amount decimal(12,2));
+
+create table remarks(rem_id int, rem_date Date, rem_time Time, details varchar(64));
+
+create table counter(counter_no int, active_time time, counter_state varchar(5), currentCart_no int);
+insert into counter values(	0, '00:00:00', 'CLOSE', 0);
+insert into counter values( 1, '00:00:00', 'OPEN' , 0);
+insert into counter values( 2, '00:00:00', 'OPEN' , 0);
+insert into counter values( 3, '00:00:00', 'OPEN' , 0);
+insert into counter values( 4, '00:00:00', 'OPEN' , 0);
+insert into counter values( 5, '00:00:00', 'OPEN' , 0);
+insert into counter values( 6, '00:00:00', 'OPEN' , 0);
+insert into counter values( 7, '00:00:00', 'OPEN' , 0);
+insert into counter values( 8, '00:00:00', 'OPEN' , 0);
+insert into counter values( 9, '00:00:00', 'OPEN' , 0);
+insert into counter values(10, '00:00:00', 'OPEN' , 0);
+insert into counter values(11, '00:00:00', 'OPEN' , 0);
+insert into counter values(12, '00:00:00', 'OPEN' , 0);
+insert into counter values(13, '00:00:00', 'OPEN' , 0);
+insert into counter values(14, '00:00:00', 'OPEN' , 0);
+insert into counter values(15, '00:00:00', 'OPEN' , 0);
+
+create table cart(cart_no int, counter_no int, order_no int);
+
+create table orders(order_no int, inv_id int);
+
+-----Manual Reset-------
+delete from inventory;
+delete from items;
+delete from packaging;
+delete from uom;
+delete from pricing;
+delete from remarks;
+delete from cart;
+delete from orders;
+
+update counter set counter_state='OPEN' where counter_no>0;
+
+-----sample queries-----
+
+1.) getting all items from inventory:
+select 
+	a.item_no, 
+	a.description, 
+	a.lot_no, 
+	a.date_added, 
+	a.exp_date, 
+	a.brand, 
+	b.qty, 
+	c.name, 
+	d.cost, 
+	d.unit_price, 
+	d.discount, 
+	d.unit_amount
+from
+	items as a  
+	join 
+	packaging as b 
+	join 
+	uom as c 
+	join 
+	pricing as d 
+	join 
+	remarks as r
+	join
+	inventory as e 
+on
+	e.item_id = a.item_id and 
+	e.pack_id = b.pack_id and b.uom_id = c.uom_id and 
+	e.price_id = d.price_id and
+	e.rem_id = r.rem_id;
+	
+2.
+select 
+	p.pack_id, 
+	p.qty,
+	p.size,
+	p.uom_id,
+	p.parentPack_id
+from 
+	packaging p join inventory i 
+where 
+	p.parentPack_id=1 
+	and 
+	(
+		i.item_condition='STORED' 
+		or 
+		i.item_condition='ARCHIVED' 
+	);
+	
+3.
+select 
+	*
+from 
+	packaging p inner join inventory i 
+on 
+	p.pack_id=i.pack_id
+where
+	p.parentPack_id=1
+	and 
+	(
+		i.item_condition='STORED' 
+		or 
+		i.item_condition='ARCHIVED' 
+	);
